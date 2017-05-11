@@ -4,8 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/index.js"></script>
     <title>Shwipe</title>
 </head>
 <body>
@@ -22,6 +24,14 @@
             </ul>
         </div>
     </nav>
-    {{message}}
+    <div class="content">
+        <div class="likePanel">
+            see likes
+        </div>
+        <div class="swipePanel">
+            {{message}}
+            <button type="button" class="btn" onclick="getNewShoe()">New Shoe</button>
+        </div>
+    </div>
 </body>
 </html>

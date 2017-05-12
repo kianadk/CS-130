@@ -66,17 +66,6 @@ public class ProductResponse {
         }
     }
 
-    public static class Images{
-        public List<Image> image;
-
-        @Override
-        public String toString(){
-            return "Images{" +
-                    "image='" + image + '\'' +
-                    '}';
-        }
-    }
-
     public static class Image{
         public String value;
 
@@ -87,5 +76,17 @@ public class ProductResponse {
                     '}';
         }
     }
+
+    public static class Images {
+        public List<Image> image;
+
+        @Override
+        public String toString() {
+            return "Images{" +
+                    "image=" + image +
+                    '}';
+        }
+    }
+
 }
 

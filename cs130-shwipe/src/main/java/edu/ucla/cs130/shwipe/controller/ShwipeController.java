@@ -35,8 +35,9 @@ public class ShwipeController {
     @ResponseBody
     public ProductResponse proxy() {
         ProductResponse response;
-        String url = createProductInfoRequestUrl(7313752673L);
+        String url = createCategoryInfoRequestUrl(10150000L);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
+        System.out.println(response);
         return response;
     }
 
@@ -44,6 +45,12 @@ public class ShwipeController {
         String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&productId=" + productId +
                 "&productIdType=SZOID";
+        return url;
+    }
+
+    private String createCategoryInfoRequestUrl(Long productId) {
+        String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId + "&format=json&results=1";
         return url;
     }
 }

@@ -37,6 +37,9 @@ public class ProductResponse {
         public String title;
         public String description;
         public String manufacturer;
+        public Images images;
+        public Url url;
+
 
         // Add new attributes as required
 
@@ -47,8 +50,43 @@ public class ProductResponse {
                     ", title='" + title + '\'' +
                     ", manufacturer='" + manufacturer + '\'' +
                     ", description='" + description + '\'' +
+                   // ", url='" + url + '\'' +
                     '}';
         }
     }
+
+    public static class Url {
+        public String value;
+
+        @Override
+        public String toString() {
+            return "Url{" +
+                    "url=" + value +
+                    '}';
+        }
+    }
+
+    public static class Images {
+        public List<Image> image;
+
+        @Override
+        public String toString() {
+            return "Images{" +
+                    "image=" + image +
+                    '}';
+        }
+    }
+
+    public static class Image {
+        public String value;
+
+        @Override
+        public String toString() {
+            return "Image{" +
+                    "image=" + value +
+                    '}';
+        }
+    }
+
 }
 

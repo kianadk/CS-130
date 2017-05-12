@@ -37,6 +37,7 @@ public class ShwipeController {
         ProductResponse response;
         String url = createProductInfoRequestUrl(7313752673L);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
+        System.out.println(response);
         return response;
     }
 

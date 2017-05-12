@@ -42,6 +42,7 @@ public class ShwipeController {
             cid = 10110000L;
         else
             cid = 100001755L;
+        offset %=250;
         ProductResponse response;
         String url = createCategoryInfoRequestUrl(cid, offset);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();

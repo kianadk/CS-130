@@ -26,28 +26,18 @@ public class ShwipeController {
     @Value("${publisher.id}")
     Long publisherId;
 
-    @RequestMapping("/")
-    public String catalog(Map<String, Object> context) {
-        MerchantsResponse response;
-        String url = createMerchantInfoRequestUrl(401L);
-        response = restTemplate.getForEntity(url, MerchantsResponse.class).getBody();
-        context.put("message", response);
+    @RequestMapping("/") // This is only temporary
+    public String product(Map<String, Object> context) {
         return "index";
     }
 
-    @RequestMapping("/product") // This is only temporary
-    public String product(Map<String, Object> context) {
+    @RequestMapping(value="/proxy", produces="Application/json")
+    @ResponseBody
+    public ProductResponse proxy() {
         ProductResponse response;
         String url = createProductInfoRequestUrl(7313752673L);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
-        context.put("message", response);
-        return "index";
-    }
-
-    private String createMerchantInfoRequestUrl(Long merchantId) {
-        String url = "http://catalog.bizrate.com/services/catalog/v1/api/merchantinfo?apiKey="
-                + apiKey + "&publisherId=" + publisherId + "&merchantId=" + merchantId;
-        return url;
+        return response;
     }
 
     private String createProductInfoRequestUrl(Long productId) {

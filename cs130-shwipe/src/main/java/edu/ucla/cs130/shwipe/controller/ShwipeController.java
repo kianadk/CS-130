@@ -26,34 +26,41 @@ public class ShwipeController {
     @Value("${publisher.id}")
     Long publisherId;
 
-    @RequestMapping("/")
-    public String catalog(Map<String, Object> context) {
-        MerchantsResponse response;
-        String url = createMerchantInfoRequestUrl(401L);
-        response = restTemplate.getForEntity(url, MerchantsResponse.class).getBody();
-        context.put("message", response);
-        return "index";
-    }
-
-    @RequestMapping("/product") // This is only temporary
+    @RequestMapping("/") // This is only temporary
     public String product(Map<String, Object> context) {
-        ProductResponse response;
-        String url = createProductInfoRequestUrl(7313752673L);
-        response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
-        context.put("message", response);
         return "index";
     }
 
-    private String createMerchantInfoRequestUrl(Long merchantId) {
-        String url = "http://catalog.bizrate.com/services/catalog/v1/api/merchantinfo?apiKey="
-                + apiKey + "&publisherId=" + publisherId + "&merchantId=" + merchantId;
-        return url;
+    @RequestMapping(value="/proxy", produces="Application/json")
+    @ResponseBody
+    public ProductResponse proxy(@RequestParam(name = "category") String category,
+                                 @RequestParam(name = "offset") int offset) {
+        Long cid;
+        if (category.equals("men"))
+            cid = 10150000L;
+        else if (category.equals("women"))
+            cid = 10110000L;
+        else
+            cid = 100001755L;
+        offset %=250;
+        ProductResponse response;
+        String url = createCategoryInfoRequestUrl(cid, offset);
+        response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
+        System.out.println(response);
+        return response;
     }
 
     private String createProductInfoRequestUrl(Long productId) {
         String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&productId=" + productId +
                 "&productIdType=SZOID";
+        return url;
+    }
+
+    private String createCategoryInfoRequestUrl(Long productId, int start) {
+        String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
+                "&start=" + start + "&format=json&results=1";
         return url;
     }
 }

@@ -1,0 +1,41 @@
+html,body {
+    height: 100%;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.likePanel {
+    background-color: red;
+    height: 100%;
+    width: 25%;
+    margin: 0;
+    display: inline-block;
+    float: left;
+}
+
+.swipePanel {
+    height: 100%;
+    width: 75%;
+    margin: 0;
+    display: inline-block;
+    float: left;
+    text-align: center;
+}
+
+.shoePicture{
+    height: 300px;
+    width: 300px;
+    display: inline;
+}
+
+.swiper {
+    display: inline-block;
+}
+
+#currentShoe {
+    display: inline;
+}

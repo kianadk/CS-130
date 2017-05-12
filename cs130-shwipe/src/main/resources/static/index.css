@@ -23,4 +23,19 @@ html,body {
     margin: 0;
     display: inline-block;
     float: left;
+    text-align: center;
+}
+
+.shoePicture{
+    height: 300px;
+    width: 300px;
+    display: inline;
+}
+
+.swiper {
+    display: inline-block;
+}
+
+#currentShoe {
+    display: inline;
 }

@@ -15,6 +15,16 @@ public class ProductResponse {
                 '}';
     }
 
+    public String getProductTitle(){
+        if (products.product.size() > 0)
+            return products.product.get(0).title;
+        else return null;
+    }
+
+    public void replaceImages(List<String> imgUrl){
+        products.product.get(0).images.replaceImages(imgUrl);
+    }
+
     public static class Products {
         public List<Product> product;
         public Long includedResults;
@@ -69,6 +79,14 @@ public class ProductResponse {
     public static class Image{
         public String value;
 
+        public Image(String value){
+            this.value = value;
+        }
+
+        public Image(){
+            super();
+        }
+
         @Override
         public String toString(){
             return "Image{" +
@@ -85,6 +103,27 @@ public class ProductResponse {
             return "Images{" +
                     "image=" + image +
                     '}';
+        }
+
+        /*
+        if there are none, default to those provided by connexity
+        replace stock with however many from flickr, 5 max
+        if less than # of ones from stock, then just keep those
+         */
+        public void replaceImages(List<String> imgUrl){
+            int oldSize = image.size();
+            int newSize = imgUrl.size();
+            System.out.println("old size: " + oldSize + "\nnew size: " + newSize);
+            int counter = 0;
+            int size = (newSize <= oldSize) ? newSize : oldSize;
+            for (int i = 0; i < size; i++) {
+                image.get(i).value = imgUrl.get(i);
+            }
+            if (size < newSize){
+                for(; size < newSize; size++){
+                    image.add(new Image(imgUrl.get(size)));
+                }
+            }
         }
     }
 

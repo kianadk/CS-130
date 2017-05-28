@@ -2,6 +2,7 @@ package edu.ucla.cs130.shwipe.controller;
 
 import edu.ucla.cs130.shwipe.model.MerchantsResponse;
 import edu.ucla.cs130.shwipe.model.ProductResponse;
+import edu.ucla.cs130.shwipe.model.ImageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class ShwipeController {
     @Value("${publisher.id}")
     Long publisherId;
 
+    @Value("${flickr.key}")
+    String flickrKey;
+
     @RequestMapping("/") // This is only temporary
     public String product(Map<String, Object> context) {
         return "index";
@@ -46,6 +50,10 @@ public class ShwipeController {
         ProductResponse response;
         String url = createCategoryInfoRequestUrl(cid, offset);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
+        String imageQuery = shortenSearch(response.getProductTitle());
+        String imageUrl = createImageUrl(imageQuery);
+        ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
+        response.replaceImages(imageResponse.getImages());
         System.out.println(response);
         return response;
     }
@@ -62,5 +70,21 @@ public class ShwipeController {
                 + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
                 "&start=" + start + "&format=json&results=1";
         return url;
+    }
+
+    private String createImageUrl(String product){
+        String url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="
+                + flickrKey + "&text=" + product + "&media=photos&per_page=5&format=json&nojsoncallback=?";
+        return url;
+    }
+
+    private String shortenSearch(String query){
+        String[] split = query.split("\\s+");
+        String formattedQuery = split[0];
+        if (split.length <= 3)
+            for(int i = 1; i < split.length; i++)
+                formattedQuery += "+" + split[i];
+        else formattedQuery = formattedQuery + "+" + split[1] + "+" + split[2];
+        return formattedQuery;
     }
 }

@@ -2,6 +2,40 @@ var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 
+function loginCallback(response){
+    if(response.status === "connected"){
+        console.log("logged in now");
+    }
+    else{
+        console.log("did not log in");
+    }
+}
+
+function loadFbSdk(){
+    fetch("/fbId")
+    .then(response => {
+        response.text().then(data => {
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId            : data,
+              autoLogAppEvents : true,
+              xfbml            : true,
+              version          : 'v2.9'
+            });
+            FB.AppEvents.logPageView();
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        });
+    });
+}
+
 function getNewShoe(){
     fetch("/proxy?category=" + gender + "&offset=" + offset++)
     .then(response => {

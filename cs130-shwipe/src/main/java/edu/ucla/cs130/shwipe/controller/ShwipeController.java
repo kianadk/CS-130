@@ -30,10 +30,22 @@ public class ShwipeController {
     @Value("${flickr.key}")
     String flickrKey;
 
-    @RequestMapping("/") // This is only temporary
-    public String product(Map<String, Object> context) {
+    @Value("${fb.id}")
+    String fbId;
+
+    @RequestMapping("/")
+    public String index(Map<String, Object> context) {
+        return "login";
+    }
+
+    @RequestMapping("/home")
+    public String home(Map<String, Object> context) {
         return "index";
     }
+
+    @RequestMapping(value="/fbId", produces="text/plain")
+    @ResponseBody
+    public String fbId(Map<String, Object> context){ return fbId; }
 
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody

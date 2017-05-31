@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by kianakavoosi on 5/5/17.
@@ -39,7 +42,8 @@ public class ShwipeController {
     }
 
     @RequestMapping("/home")
-    public String home(Map<String, Object> context) {
+    public String home(@RequestParam(name = "id") String id,
+                       Map<String, Object> context) {
         return "index";
     }
 
@@ -66,8 +70,21 @@ public class ShwipeController {
         String imageUrl = createImageUrl(imageQuery);
         ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
         response.replaceImages(imageResponse.getImages());
-        System.out.println(response);
         return response;
+    }
+
+    @RequestMapping("/addLike")
+    @ResponseBody
+    public void addLike(@RequestParam(name = "productId") String productId,
+                        @RequestParam(name = "userId") String userId){
+        if(productLikes.containsKey(productId)){
+            productLikes.get(productId).add(userId);
+        }
+        else{
+            ArrayList<String> likes = new ArrayList<>();
+            likes.add(userId);
+            productLikes.put(productId, likes);
+        }
     }
 
     private String createProductInfoRequestUrl(Long productId) {
@@ -99,4 +116,6 @@ public class ShwipeController {
         else formattedQuery = formattedQuery + "+" + split[1] + "+" + split[2];
         return formattedQuery;
     }
+
+    private HashMap<String, ArrayList<String>> productLikes = new HashMap<String, ArrayList<String>>();
 }

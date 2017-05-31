@@ -113,7 +113,6 @@ public class ProductResponse {
         public void replaceImages(List<String> imgUrl){
             int oldSize = image.size();
             int newSize = imgUrl.size();
-            System.out.println("old size: " + oldSize + "\nnew size: " + newSize);
             int counter = 0;
             int size = (newSize <= oldSize) ? newSize : oldSize;
             for (int i = 0; i < size; i++) {

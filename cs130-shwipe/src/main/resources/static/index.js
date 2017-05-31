@@ -11,7 +11,7 @@ function loginCallback(response){
     }
 }
 
-function loadFbSdk(){
+(function loadFbSdk(){
     fetch("/fbId")
     .then(response => {
         response.text().then(data => {
@@ -34,7 +34,7 @@ function loadFbSdk(){
            }(document, 'script', 'facebook-jssdk'));
         });
     });
-}
+})()
 
 function getNewShoe(){
     fetch("/proxy?category=" + gender + "&offset=" + offset++)
@@ -48,7 +48,19 @@ function getNewShoe(){
     });
 }
 
-function addToLikes(){
+function Like(){
+    addToLikeList();
+    recordLike();
+    getNewShoe();
+}
+
+function recordLike(){
+    idIndex = window.location.search.indexOf("id=");
+    userId = window.location.search.substring(idIndex + 3);
+    fetch("/addLike?productId=" + curData.id + "&userId=" + userId);
+}
+
+function addToLikeList(){
     var newPara = document.createElement("p");
     var t = document.createTextNode(curData.title);
     newPara.appendChild(t);

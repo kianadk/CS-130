@@ -3,6 +3,7 @@ package edu.ucla.cs130.shwipe.controller;
 import edu.ucla.cs130.shwipe.model.MerchantsResponse;
 import edu.ucla.cs130.shwipe.model.ProductResponse;
 import edu.ucla.cs130.shwipe.model.ImageResponse;
+import edu.ucla.cs130.shwipe.model.BrandResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -87,6 +88,15 @@ public class ShwipeController {
         }
     }
 
+    @RequestMapping(value="/brand", produces="Application/json")
+    @ResponseBody
+    public BrandResponse proxy(@RequestParam(name = "keyword") String keyword) {
+        BrandResponse response;
+        String url = createBrandInfoRequestUrl(keyword);
+        response = restTemplate.getForEntity(url, BrandResponse.class).getBody();
+        return response;
+    }
+
     private String createProductInfoRequestUrl(Long productId) {
         String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&productId=" + productId +
@@ -104,6 +114,12 @@ public class ShwipeController {
     private String createImageUrl(String product){
         String url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="
                 + flickrKey + "&text=" + product + "&media=photos&per_page=5&format=json&nojsoncallback=?";
+        return url;
+    }
+
+    private String createBrandInfoRequestUrl(String keyword) {
+        String url = "http://catalog.bizrate.com/services/catalog/v1/api/brands?apiKey="
+                + apiKey + "&publisherId=" + publisherId + "&results=512&format=json&keyword=" + keyword;
         return url;
     }
 

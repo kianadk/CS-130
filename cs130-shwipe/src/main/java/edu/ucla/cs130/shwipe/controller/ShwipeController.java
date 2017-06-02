@@ -3,6 +3,7 @@ package edu.ucla.cs130.shwipe.controller;
 import edu.ucla.cs130.shwipe.model.MerchantsResponse;
 import edu.ucla.cs130.shwipe.model.ProductResponse;
 import edu.ucla.cs130.shwipe.model.ImageResponse;
+import edu.ucla.cs130.shwipe.model.RecommendationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -107,6 +109,51 @@ public class ShwipeController {
         return url;
     }
 
+	// Creates a shoe the user would like based off of their UserProfile
+    public String createGoodShoeUrl (RecommendationResponse.UserProfile profile, int start){
+        String categoryId;
+        if (profile.male > profile.female)
+            categoryId = "10150000";
+        else
+            categoryId = "10110000";
+        String min = profile.minPrice;
+        String max = profile.maxPrice;
+
+        String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + categoryId +
+                "&start=" + start + "&minPrice=" + min + "&maxPrice=" + max +
+                "&format=json&results=1";
+        return url;
+    }
+
+    // Creates a shoe the user would not like (wildcard) based off of their UserProfile
+    public String createBadShoeUrl (RecommendationResponse.UserProfile profile, int start){
+        String categoryId;
+        if (profile.female > profile.male)
+            categoryId = "10150000";
+        else
+            categoryId = "10110000";
+        String min = profile.maxPrice;
+        // Add $100 to the upper limit
+        String max = Integer.toString(Integer.parseInt(profile.maxPrice) + 10000);
+
+        String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + categoryId +
+                "&start=" + start + "&minPrice=" + min + "&maxPrice=" + max +
+                "&format=json&results=1";
+        return url;
+    }
+
+    // Creates a 'quantity' number of good shoes based off of a UserProfile
+    public List<String> generateRecommendations (RecommendationResponse.UserProfile profile, int start, int quantity){
+        List<String> recommendations = new ArrayList<String>();
+        for (int i = 0; i < quantity; i++) {
+            recommendations.add(createGoodShoeUrl(profile, start));
+            start++;
+        }
+        return recommendations;
+    }
+	
     private String shortenSearch(String query){
         String[] split = query.split("\\s+");
         String formattedQuery = split[0];

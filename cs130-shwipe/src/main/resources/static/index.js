@@ -12,6 +12,21 @@ function loginCallback(response){
     }
 }
 
+function logout(){
+    FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                FB.logout(function(response) {
+                    window.location.assign("/");
+                });
+            }
+            else{
+                console.log("in the else");
+                window.location.assign("/");
+            }
+        });
+
+}
+
 (function loadFbSdk(){
     fetch("/fbId")
     .then(response => {

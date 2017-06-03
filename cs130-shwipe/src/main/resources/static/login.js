@@ -28,7 +28,7 @@ function getLoginStatus(){
     FB.getLoginStatus(function(response){
         if(response.status === "connected"){
             //redirect to home if logged in
-            window.location.replace("home?id=" + response.authResponse.userID);
+            //window.location.replace("home?id=" + response.authResponse.userID);
         }
     });
 }

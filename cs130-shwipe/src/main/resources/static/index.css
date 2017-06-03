@@ -36,6 +36,11 @@ html,body {
     display: inline;
 }
 
+.data {
+    display: block;
+    text-align: right;
+}
+
 .likedProd p{
     display: inline;
 }

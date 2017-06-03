@@ -52,6 +52,12 @@ public class ShwipeController {
     @ResponseBody
     public String fbId(Map<String, Object> context){ return fbId; }
 
+    @RequestMapping(value="/getLikes", produces="text/plain")
+    @ResponseBody
+    public String getLikes(@RequestParam(name = "productId") String productId){
+        return productLikes.containsKey(productId) ? Integer.toString(productLikes.get(productId).size()) : "0";
+    }
+
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody
     public ProductResponse proxy(@RequestParam(name = "category") String category,

@@ -1,6 +1,7 @@
 var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
+var count = "-";
 
 function loginCallback(response){
     if(response.status === "connected"){
@@ -49,7 +50,8 @@ function getNewShoe(){
 }
 
 function Like(){
-    addToLikeList();
+    getLikes();
+    //addToLikeList();
     recordLike();
     getNewShoe();
 }
@@ -60,19 +62,34 @@ function recordLike(){
     fetch("/addLike?productId=" + curData.id + "&userId=" + userId);
 }
 
-function addToLikeList(){
+function getLikes(){
+    fetch("/getLikes?productId=" + curData.id)
+    .then(response => {
+        response.text().then(data => { addToLikeList(data); });
+    });
+}
+
+function addToLikeList(like_count){
     var newPara = document.createElement("p");
+    var newPara1 = document.createElement("p");
     var t = document.createTextNode(curData.title);
+    //console.log(like_count);
+    var t1 = document.createTextNode(like_count + " likes");
     newPara.appendChild(t);
+    newPara1.appendChild(t1);
     var newImg = document.createElement("img");
     newImg.setAttribute("src", curData.images.image[3].value);
     var newDiv1 = document.createElement("div");
     newDiv1.setAttribute("class", "textBox");
     newDiv1.appendChild(newPara);
+    var newDiv3 = document.createElement("div");
+    newDiv3.setAttribute("class", "data");
+    newDiv3.appendChild(newPara1);
     var newDiv2 = document.createElement("div");
     newDiv2.setAttribute("class", "likedProd");
     newDiv2.appendChild(newImg);
     newDiv2.appendChild(newDiv1);
+    newDiv2.appendChild(newDiv3);
 
     var link = document.createElement("a");
     link.setAttribute("href", curData.url.view);

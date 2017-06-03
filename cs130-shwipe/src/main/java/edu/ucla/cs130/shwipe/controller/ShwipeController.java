@@ -17,11 +17,16 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+
 /**
  * Created by kianakavoosi on 5/5/17.
  */
 @Controller
 public class ShwipeController {
+
+    static final int LIKE_INDEX = 0;
+    static final int DISLIKE_INDEX = 1;
+
     @Autowired
     RestTemplate restTemplate;
 
@@ -55,7 +60,13 @@ public class ShwipeController {
     @RequestMapping(value="/getLikes", produces="text/plain")
     @ResponseBody
     public String getLikes(@RequestParam(name = "productId") String productId){
-        return productLikes.containsKey(productId) ? Integer.toString(productLikes.get(productId).size()) : "0";
+        return productData.containsKey(productId) ? Integer.toString(productData.get(productId)[LIKE_INDEX]) : "0";
+    }
+
+    @RequestMapping(value="/getDislikes", produces="text/plain")
+    @ResponseBody
+    public String getDislikes(@RequestParam(name = "productId") String productId){
+        return productData.containsKey(productId) ? Integer.toString(productData.get(productId)[DISLIKE_INDEX]) : "0";
     }
 
     @RequestMapping(value="/proxy", produces="Application/json")
@@ -80,17 +91,19 @@ public class ShwipeController {
         return response;
     }
 
-    @RequestMapping("/addLike")
+    @RequestMapping("/addData")
     @ResponseBody
-    public void addLike(@RequestParam(name = "productId") String productId,
-                        @RequestParam(name = "userId") String userId){
-        if(productLikes.containsKey(productId)){
-            productLikes.get(productId).add(userId);
+    public void addData(@RequestParam(name = "productId") String productId,
+                        @RequestParam(name = "index") int index){
+        if(productData.containsKey(productId)){
+            productData.get(productId)[index]++;
         }
         else{
-            ArrayList<String> likes = new ArrayList<>();
-            likes.add(userId);
-            productLikes.put(productId, likes);
+            int[] data = new int[2];
+            data[0] = 0;
+            data[1] = 0;
+            data[index]++;
+            productData.put(productId, data);
         }
     }
 
@@ -139,5 +152,5 @@ public class ShwipeController {
         return formattedQuery;
     }
 
-    private HashMap<String, ArrayList<String>> productLikes = new HashMap<String, ArrayList<String>>();
+    private HashMap<String, int[]> productData = new HashMap<String, int[]>();
 }

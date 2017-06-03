@@ -3,6 +3,9 @@ var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";
 
+const LIKE_INDEX = 0;
+const DISLIKE_INDEX = 1;
+
 function loginCallback(response){
     if(response.status === "connected"){
         console.log("logged in now");
@@ -64,17 +67,23 @@ function getNewShoe(){
     });
 }
 
-function Like(){
+function like(){
     getLikes();
-    //addToLikeList();
     recordLike();
     getNewShoe();
 }
 
+function dislike(){
+    recordDislike();
+    getNewShoe();
+}
+
+function recordDislike(){
+    fetch("/addData?productId=" + curData.id + "&index=" + DISLIKE_INDEX);
+}
+
 function recordLike(){
-    idIndex = window.location.search.indexOf("id=");
-    userId = window.location.search.substring(idIndex + 3);
-    fetch("/addLike?productId=" + curData.id + "&userId=" + userId);
+    fetch("/addData?productId=" + curData.id + "&index=" + LIKE_INDEX);
 }
 
 function getLikes(){

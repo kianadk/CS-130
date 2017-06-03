@@ -10,7 +10,7 @@
     <script src="/index.js"></script>
     <title>Shwipe</title>
 </head>
-<body>
+<body onload="getNewShoe()">
 <div class="container">
     <div class="col-md-3" id="likePanel">
         <div id="likeHead">
@@ -23,11 +23,11 @@
         <h1>shwipe</h1>
         <button type="button" class="btn" onclick="logout()">Logout</button>
         <div class="shoe-box">
-            <button type="button" class="btn" onclick="getNewShoe()">Dislike</button>
+            <button type="button" class="btn" onclick="dislike()">Dislike</button>
             <div id="currentShoe">
-                <img class="shoePicture" src="http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt"/>
+                <img class="shoePicture" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
             </div>
-            <button type="button" class="btn" onclick="Like()">Like</button>
+            <button type="button" class="btn" onclick="like()">Like</button>
         </div>
 
     </div>

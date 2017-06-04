@@ -88,6 +88,8 @@ public class ShwipeController {
         String imageUrl = createImageUrl(imageQuery);
         ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
         response.replaceImages(imageResponse.getImages());
+
+        System.out.println(response);
         return response;
     }
 

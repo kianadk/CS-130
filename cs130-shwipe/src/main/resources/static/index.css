@@ -16,6 +16,7 @@ html,body {
     height: 100%;
     font-color: black;
     border-right: 1px solid black;
+    overflow-y: scroll
 }
 
 #likeHead {
@@ -26,8 +27,7 @@ html,body {
 }
 
 .likedProd img{
-    width: 60px;
-    height: 60px;
+    width: 20%;
     padding-right: 10px;
     display: inline;
 }
@@ -91,4 +91,12 @@ html,body {
 .btn {
     display: inline;
     width: 75px;
+}
+
+#description {
+    display: none;
+}
+
+#expand:hover + #description {
+    display: block;
 }

@@ -143,7 +143,7 @@ function addToLikeList(like_count){
     newDiv2.appendChild(newDiv3);
 
     var link = document.createElement("a");
-    link.setAttribute("href", curData.url.view);
+    link.setAttribute("href", curData.url.value);
     link.appendChild(newDiv2);
 
     document.getElementById("likeList").appendChild(link);

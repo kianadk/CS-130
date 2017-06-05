@@ -56,7 +56,8 @@ function logout(){
 })()
 
 function getNewShoe(){
-    fetch("/proxy?category=" + gender + "&offset=" + offset++)
+    //fetch("/proxy?category=" + gender + "&offset=" + offset++)
+    fetch("/proxy?offset=" + offset++)
     .then(response => {
         response.json().then(data => {
             curData  = data.products.product[0];

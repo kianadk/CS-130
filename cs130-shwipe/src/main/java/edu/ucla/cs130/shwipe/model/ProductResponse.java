@@ -43,7 +43,7 @@ public class ProductResponse {
     public static class Product {
         public Long id;
         //public Long merchantId;
-        //public Long categoryId;
+        public Long categoryId;
         public String title;
         public String description;
         public String manufacturer;
@@ -57,6 +57,7 @@ public class ProductResponse {
             return "Product{" +
                     "id='" + id + '\'' +
                     ", title='" + title + '\'' +
+                    ", categoryId='" + categoryId + '\'' +
                     ", manufacturer='" + manufacturer + '\'' +
                     ", description='" + description + '\'' +
                     ", url='" + url + '\'' +

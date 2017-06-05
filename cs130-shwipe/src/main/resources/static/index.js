@@ -1,4 +1,4 @@
-var offset = 1000;
+var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";

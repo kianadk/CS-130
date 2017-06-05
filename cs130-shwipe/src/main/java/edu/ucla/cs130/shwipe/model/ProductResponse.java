@@ -50,6 +50,8 @@ public class ProductResponse {
         public String manufacturer;
         public Url url;
         public Images images;
+        public Price price;
+
 
         // Add new attributes as required
 
@@ -59,6 +61,7 @@ public class ProductResponse {
                     "id='" + id + '\'' +
                     ", title='" + title + '\'' +
                     ", categoryId='" + categoryId + '\'' +
+                    ", price='" + price + '\'' +
                     ", manufacturer='" + manufacturer + '\'' +
                     ", description='" + description + '\'' +
                     ", url='" + url + '\'' +
@@ -74,6 +77,17 @@ public class ProductResponse {
         public String toString(){
             return "Url{" +
                     "view='" + value + '\'' +
+                    '}';
+        }
+    }
+
+    public static class Price{
+        public String value;
+
+        @Override
+        public String toString(){
+            return "Price{" +
+                    "value='" + value + '\'' +
                     '}';
         }
     }

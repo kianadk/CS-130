@@ -93,7 +93,7 @@ public class ShwipeController {
         if (brands_size == 0)
             brand_id = -1L;
         else {
-            if (brand_preferences.get(brand_index) == "")
+            if (brand_preferences.get(brand_index).equals(""))
                 brand_id = -1L;
             else
                 brand_id = Long.parseLong(brand_preferences.get(brand_index), 10);
@@ -133,7 +133,9 @@ public class ShwipeController {
     @RequestMapping("/addPreferences")
     @ResponseBody
     public void addPreferences(@RequestParam(name = "category") String category,
-                                @RequestParam(name = "brand") String brand){
+                               @RequestParam(name = "brand") String brand,
+                               @RequestParam(name = "minPrice") String minP,
+                               @RequestParam(name = "maxPrice") String maxP){
         List<String> categories = Arrays.asList(category.split("\\s*,\\s*"));
         category_preferences.clear();
         for (String c : categories) {
@@ -148,6 +150,10 @@ public class ShwipeController {
                 brand_preferences.add(b);
             }
         }
+        if (!minP.equals(""))
+            minPrice = Integer.parseInt(minP);
+        if (!maxP.equals(""))
+            maxPrice = Integer.parseInt(maxP);
     }
 
     @RequestMapping(value="/brand", produces="Application/json")
@@ -168,14 +174,16 @@ public class ShwipeController {
 
     private String createCategoryInfoRequestUrl(Long productId, Long brandId, int start) {
         String url;
-        if (brandId == -1L)
-            url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+        url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
                 "&start=" + start + "&format=json&results=1";
-        else
-            url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
-                    + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
-                    "&start=" + start + "&brandId=" + brandId + "&format=json&results=1";
+        if (brandId != -1L)
+            url = url + "&brandId=" + brandId;
+        if (minPrice != -1L)
+            url = url + "&minPrice=" + minPrice;
+        if (maxPrice != -1L)
+            url = url + "&maxPrice=" + maxPrice;
+        //System.out.println(url);
         return url;
     }
 
@@ -206,6 +214,8 @@ public class ShwipeController {
     private HashMap<String, int[]> productData = new HashMap<String, int[]>();
     private List<String> category_preferences = new ArrayList<String>();
     private List<String> brand_preferences = new ArrayList<String>();
+    private int minPrice = -1;
+    private int maxPrice = -1;
     private int category_index = 0;
     private int brand_index = 0;
 

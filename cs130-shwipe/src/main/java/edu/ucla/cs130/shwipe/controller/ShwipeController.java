@@ -1,6 +1,5 @@
 package edu.ucla.cs130.shwipe.controller;
 
-import edu.ucla.cs130.shwipe.model.MerchantsResponse;
 import edu.ucla.cs130.shwipe.model.ProductResponse;
 import edu.ucla.cs130.shwipe.model.ImageResponse;
 import edu.ucla.cs130.shwipe.model.BrandResponse;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -71,27 +71,48 @@ public class ShwipeController {
 
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody
-    public ProductResponse proxy(@RequestParam(name = "category") String category,
-                                 @RequestParam(name = "offset") int offset) {
+    public ProductResponse proxy(@RequestParam(name = "offset") int offset) {
         Long cid;
-        if (category.equals("men"))
-            cid = 10150000L;
-        else if (category.equals("women"))
-            cid = 10110000L;
-        else
+        int categories_size = category_preferences.size();
+        if (categories_size == 0)
             cid = 100001755L;
+        else {
+            if (category_preferences.get(category_index).equals("men"))
+                cid = 10150000L;
+            else if (category_preferences.get(category_index).equals("women"))
+                cid = 10110000L;
+            else
+                cid = 100001755L;
+            category_index++;
+            category_index %= categories_size;
+        }
         offset %=250;
+
+        Long brand_id;
+        int brands_size = brand_preferences.size();
+        if (brands_size == 0)
+            brand_id = -1L;
+        else {
+            if (brand_preferences.get(brand_index) == "")
+                brand_id = -1L;
+            else
+                brand_id = Long.parseLong(brand_preferences.get(brand_index), 10);
+            brand_index++;
+            brand_index %= brands_size;
+        }
+
         ProductResponse response;
-        String url = createCategoryInfoRequestUrl(cid, offset);
+        String url = createCategoryInfoRequestUrl(cid, brand_id, offset);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
         String imageQuery = shortenSearch(response.getProductTitle());
         String imageUrl = createImageUrl(imageQuery);
         ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
         response.replaceImages(imageResponse.getImages());
-
+        System.out.println(url);
         System.out.println(response);
         return response;
     }
+
 
     @RequestMapping("/addData")
     @ResponseBody
@@ -109,9 +130,29 @@ public class ShwipeController {
         }
     }
 
+    @RequestMapping("/addPreferences")
+    @ResponseBody
+    public void addPreferences(@RequestParam(name = "category") String category,
+                                @RequestParam(name = "brand") String brand){
+        List<String> categories = Arrays.asList(category.split("\\s*,\\s*"));
+        category_preferences.clear();
+        for (String c : categories) {
+            if (!category_preferences.contains(c)) {
+                category_preferences.add(c);
+            }
+        }
+        List<String> brands = Arrays.asList(brand.split("\\s*,\\s*"));
+        brand_preferences.clear();
+        for (String b : brands) {
+            if (!brand_preferences.contains(b)) {
+                brand_preferences.add(b);
+            }
+        }
+    }
+
     @RequestMapping(value="/brand", produces="Application/json")
     @ResponseBody
-    public BrandResponse proxy(@RequestParam(name = "keyword") String keyword) {
+    public BrandResponse brand(@RequestParam(name = "keyword") String keyword) {
         BrandResponse response;
         String url = createBrandInfoRequestUrl(keyword);
         response = restTemplate.getForEntity(url, BrandResponse.class).getBody();
@@ -125,10 +166,16 @@ public class ShwipeController {
         return url;
     }
 
-    private String createCategoryInfoRequestUrl(Long productId, int start) {
-        String url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+    private String createCategoryInfoRequestUrl(Long productId, Long brandId, int start) {
+        String url;
+        if (brandId == -1L)
+            url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
                 "&start=" + start + "&format=json&results=1";
+        else
+            url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
+                    + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
+                    "&start=" + start + "&brandId=" + brandId + "&format=json&results=1";
         return url;
     }
 
@@ -157,4 +204,9 @@ public class ShwipeController {
     }
 
     private HashMap<String, int[]> productData = new HashMap<String, int[]>();
+    private List<String> category_preferences = new ArrayList<String>();
+    private List<String> brand_preferences = new ArrayList<String>();
+    private int category_index = 0;
+    private int brand_index = 0;
+
 }

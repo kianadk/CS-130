@@ -61,7 +61,7 @@ function getNewShoe(){
         response.json().then(data => {
             curData  = data.products.product[0];
 
-            var imageURL = curData.images.image[3].value;
+            var imageURL = curData.images.image[0].value;
             var imageNode = document.getElementById("currentShoe").firstElementChild;
 
             var oldMorePics = document.getElementById("morepics");
@@ -71,18 +71,14 @@ function getNewShoe(){
                 oldMorePics.remove();
             }
 
-            if (!(curData.images.image[0].value.includes("bizrate"))) {
-                imageURL = curData.images.image[0].value;
+            if (curData.images.image[1]) {
+                var morePics = document.createElement("button");
+                morePics.setAttribute("type", "button");
+                morePics.setAttribute("class", "btn");
+                morePics.setAttribute("onclick", "getNewPic()");
+                morePics.setAttribute("id", "morepics");
 
-                if (!(curData.images.image[1].value.includes("bizrate"))) {
-                    var morePics = document.createElement("button");
-                    morePics.setAttribute("type", "button");
-                    morePics.setAttribute("class", "btn");
-                    morePics.setAttribute("onclick", "getNewPic()");
-                    morePics.setAttribute("id", "morepics");
-
-                    document.getElementById("shoe-box").appendChild(morePics);
-                }
+                document.getElementById("shoe-box").appendChild(morePics);
             }
 
             imageNode.setAttribute("src", imageURL);
@@ -126,7 +122,7 @@ function addToLikeList(like_count){
     newPara.appendChild(t);
     newPara1.appendChild(t1);
     var newImg = document.createElement("img");
-    newImg.setAttribute("src", curData.images.image[3].value);
+    newImg.setAttribute("src", document.getElementById("currentShoe").firstElementChild.getAttribute("src"));
     var newDiv1 = document.createElement("div");
     newDiv1.setAttribute("class", "textBox");
     newDiv1.appendChild(newPara);
@@ -160,18 +156,23 @@ function addToLikeList(like_count){
 }
 
 function getNewPic(){
-    var imageURL = curData.images.image[1].value;
+    var imageURL;
     var imageNode = document.getElementById("currentShoe").firstElementChild;
 
-    if (curData.images.image[1].value == imageNode.getAttribute("src")) {
+    if (curData.images.image[0].value == imageNode.getAttribute("src")) {
+        imageURL = curData.images.image[1].value;
+    }
+    else if (curData.images.image[1].value == imageNode.getAttribute("src") && curData.images.image[2]) {
         imageURL = curData.images.image[2].value;
     }
-    else if (curData.images.image[2].value == imageNode.getAttribute("src")) {
+    else if (curData.images.image[2].value == imageNode.getAttribute("src") && curData.images.image[3]) {
          imageURL = curData.images.image[3].value;
-     }
-     else if (curData.images.image[3].value == imageNode.getAttribute("src")) {
-          imageURL = curData.images.image[0].value;
-     }
+    }
+    else if (curData.images.image[3].value == imageNode.getAttribute("src") && curData.images.image[4]) {
+        imageURL = curData.images.image[4].value;
+    }
+    else { imageURL = curData.images.image[0].value; }
 
     imageNode.setAttribute("src", imageURL);
 }
+

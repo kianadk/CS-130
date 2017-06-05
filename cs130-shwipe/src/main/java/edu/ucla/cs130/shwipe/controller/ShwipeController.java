@@ -191,6 +191,8 @@ public class ShwipeController {
         return url;
     }
 
+    // Since many products names are very long and unlikely to yield any results,
+    // the name is shortened to the first 3 words, which should provide enough information
     private String shortenSearch(String query){
         String[] split = query.split("\\s+");
         String formattedQuery = split[0];

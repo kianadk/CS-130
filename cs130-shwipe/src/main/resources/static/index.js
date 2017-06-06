@@ -57,7 +57,7 @@ function logout(){
 
 function getNewShoe(){
     //fetch("/proxy?category=" + gender + "&offset=" + offset++)
-    fetch("/proxy?offset=" + offset++)
+    fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
     .then(response => {
         response.json().then(data => {
             curData  = data.products.product[0];
@@ -94,17 +94,23 @@ function like(){
     getNewShoe();
 }
 
+function getId(){
+    idIndex = window.location.search.indexOf("id=");
+    userId = window.location.search.substring(idIndex + 3);
+    return userId;
+}
+
 function dislike(){
     recordDislike();
     getNewShoe();
 }
 
 function recordDislike(){
-    fetch("/addData?productId=" + curData.id + "&index=" + DISLIKE_INDEX);
+    fetch("/addData?productId=" + curData.id + "&index=" + DISLIKE_INDEX + "&userId=" + getId());
 }
 
 function recordLike(){
-    fetch("/addData?productId=" + curData.id + "&index=" + LIKE_INDEX);
+    fetch("/addData?productId=" + curData.id + "&index=" + LIKE_INDEX + "&userId=" + getId());
 }
 
 function getLikes(){

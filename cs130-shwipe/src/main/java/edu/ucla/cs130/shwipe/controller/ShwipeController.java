@@ -27,6 +27,10 @@ public class ShwipeController {
     static final int LIKE_INDEX = 0;
     static final int DISLIKE_INDEX = 1;
 
+    static final long KIDS = 100001755L;
+    static final long MENS = 10150000L;
+    static final long WOMENS = 10110000L;
+
     private HashMap<String, int[]> productData = new HashMap<String, int[]>();
     //private HashMap<String, > users = new HashMap<String, >();
     private List<String> category_preferences = new ArrayList<String>();
@@ -86,23 +90,24 @@ public class ShwipeController {
 
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody
-    public ProductResponse proxy(@RequestParam(name = "offset") int offset) {
+    public ProductResponse proxy(@RequestParam(name = "offset") int offset,
+                                 @RequestParam(name = "userId") String userId) {
         Long cid;
         int categories_size = category_preferences.size();
         if (categories_size == 0)
-            cid = 100001755L;
+            cid = KIDS;
         else {
-            if (category_preferences.get(category_index).equals("men"))
-                cid = 10150000L;
-            else if (category_preferences.get(category_index).equals("women"))
-                cid = 10110000L;
-            else
-                cid = 100001755L;
-            category_index++;
             category_index %= categories_size;
+            if (category_preferences.get(category_index).equals("men"))
+                cid = MENS;
+            else if (category_preferences.get(category_index).equals("women"))
+                cid = WOMENS;
+            else
+                cid = KIDS;
+            category_index++;
+
         }
         offset %=250;
-
         Long brand_id;
         int brands_size = brand_preferences.size();
         if (brands_size == 0)
@@ -132,7 +137,8 @@ public class ShwipeController {
     @RequestMapping("/addData")
     @ResponseBody
     public void addData(@RequestParam(name = "productId") String productId,
-                        @RequestParam(name = "index") int index){
+                        @RequestParam(name = "index") int index,
+                        @RequestParam(name = "userId") String userId){
         if(productData.containsKey(productId)){
             productData.get(productId)[index]++;
         }
@@ -150,7 +156,8 @@ public class ShwipeController {
     public void addPreferences(@RequestParam(name = "category") String category,
                                @RequestParam(name = "brand") String brand,
                                @RequestParam(name = "minPrice") String minP,
-                               @RequestParam(name = "maxPrice") String maxP){
+                               @RequestParam(name = "maxPrice") String maxP,
+                               @RequestParam(name = "userId") String userId){
         List<String> categories = Arrays.asList(category.split("\\s*,\\s*"));
         category_preferences.clear();
         for (String c : categories) {

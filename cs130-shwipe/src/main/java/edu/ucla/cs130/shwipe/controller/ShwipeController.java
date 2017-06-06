@@ -27,6 +27,15 @@ public class ShwipeController {
     static final int LIKE_INDEX = 0;
     static final int DISLIKE_INDEX = 1;
 
+    private HashMap<String, int[]> productData = new HashMap<String, int[]>();
+    //private HashMap<String, > users = new HashMap<String, >();
+    private List<String> category_preferences = new ArrayList<String>();
+    private List<String> brand_preferences = new ArrayList<String>();
+    private int minPrice = -1;
+    private int maxPrice = -1;
+    private int category_index = 0;
+    private int brand_index = 0;
+
     @Autowired
     RestTemplate restTemplate;
 
@@ -47,10 +56,16 @@ public class ShwipeController {
         return "login";
     }
 
+    // when a user logs in, this will try to find the user's profile that is saved
+    // and return it, so that the user's activity is saved between sessions.
     @RequestMapping("/home")
     public String home(@RequestParam(name = "id") String id,
                        Map<String, Object> context) {
         return "index";
+//        if (!users.containsKey(id)){
+//            users.put(id, new UserData());
+//        }
+//        return users.get(id);
     }
 
     @RequestMapping(value="/fbId", produces="text/plain")
@@ -210,13 +225,5 @@ public class ShwipeController {
         else formattedQuery = formattedQuery + "+" + split[1] + "+" + split[2];
         return formattedQuery;
     }
-
-    private HashMap<String, int[]> productData = new HashMap<String, int[]>();
-    private List<String> category_preferences = new ArrayList<String>();
-    private List<String> brand_preferences = new ArrayList<String>();
-    private int minPrice = -1;
-    private int maxPrice = -1;
-    private int category_index = 0;
-    private int brand_index = 0;
 
 }

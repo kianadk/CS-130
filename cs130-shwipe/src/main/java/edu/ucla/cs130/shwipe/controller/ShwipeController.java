@@ -1,8 +1,6 @@
 package edu.ucla.cs130.shwipe.controller;
 
-import edu.ucla.cs130.shwipe.model.ProductResponse;
-import edu.ucla.cs130.shwipe.model.ImageResponse;
-import edu.ucla.cs130.shwipe.model.BrandResponse;
+import edu.ucla.cs130.shwipe.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -32,7 +30,7 @@ public class ShwipeController {
     static final long WOMENS = 10110000L;
 
     private HashMap<String, int[]> productData = new HashMap<String, int[]>();
-    //private HashMap<String, > users = new HashMap<String, >();
+    private HashMap<String, UserData> users = new HashMap<String, UserData>();
     private List<String> category_preferences = new ArrayList<String>();
     private List<String> brand_preferences = new ArrayList<String>();
     private int minPrice = -1;
@@ -65,11 +63,18 @@ public class ShwipeController {
     @RequestMapping("/home")
     public String home(@RequestParam(name = "id") String id,
                        Map<String, Object> context) {
+        if (!users.containsKey(id)){
+            users.put(id, new UserData());
+        }
+
+        ArrayList<LikedProduct> likes = users.get(id).getLikes();
+
+        for(int i = 0; i < likes.size(); i++){
+            likes.get(i).setLikes(getLikes(likes.get(i).getId()));
+        }
+
+        context.put("likedProducts", likes);
         return "index";
-//        if (!users.containsKey(id)){
-//            users.put(id, new UserData());
-//        }
-//        return users.get(id);
     }
 
     @RequestMapping(value="/fbId", produces="text/plain")
@@ -128,25 +133,44 @@ public class ShwipeController {
         String imageUrl = createImageUrl(imageQuery);
         ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
         response.replaceImages(imageResponse.getImages());
-        System.out.println(url);
-        System.out.println(response);
         return response;
     }
 
 
-    @RequestMapping("/addData")
+    @RequestMapping("/addLikeData")
     @ResponseBody
-    public void addData(@RequestParam(name = "productId") String productId,
-                        @RequestParam(name = "index") int index,
-                        @RequestParam(name = "userId") String userId){
+    public void addLikeData(@RequestParam(name = "productId") String productId,
+                        @RequestParam(name = "userId") String userId,
+                        @RequestParam(name = "name") String name,
+                        @RequestParam(name = "link") String link,
+                        @RequestParam(name = "picture") String picture,
+                        @RequestParam(name = "description") String description){
         if(productData.containsKey(productId)){
-            productData.get(productId)[index]++;
+            productData.get(productId)[LIKE_INDEX]++;
         }
         else{
             int[] data = new int[2];
             data[0] = 0;
             data[1] = 0;
-            data[index]++;
+            data[LIKE_INDEX]++;
+            productData.put(productId, data);
+        }
+
+        users.get(userId).getLikes().add(new LikedProduct(link, picture, name, description, productId));
+    }
+
+    @RequestMapping("/addDislikeData")
+    @ResponseBody
+    public void addDislikeData(@RequestParam(name = "productId") String productId,
+                        @RequestParam(name = "userId") String userId){
+        if(productData.containsKey(productId)){
+            productData.get(productId)[DISLIKE_INDEX]++;
+        }
+        else{
+            int[] data = new int[2];
+            data[0] = 0;
+            data[1] = 0;
+            data[DISLIKE_INDEX]++;
             productData.put(productId, data);
         }
     }

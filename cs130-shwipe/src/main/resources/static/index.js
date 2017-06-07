@@ -106,17 +106,19 @@ function dislike(){
 }
 
 function recordDislike(){
-    fetch("/addData?productId=" + curData.id + "&index=" + DISLIKE_INDEX + "&userId=" + getId());
+    fetch("/addDislikeData?productId=" + curData.id + "&userId=" + getId());
 }
 
 function recordLike(){
-    fetch("/addData?productId=" + curData.id + "&index=" + LIKE_INDEX + "&userId=" + getId());
+    fetch("/addLikeData?productId=" + curData.id + LIKE_INDEX + "&userId=" + getId() +
+    "&name=" + curData.title + "&link=" + curData.url.value + "&picture=" + curData.images.image[0].value
+    + "&description=" + curData.description);
 }
 
 function getLikes(){
     fetch("/getLikes?productId=" + curData.id)
     .then(response => {
-        response.text().then(data => { addToLikeList(data); });
+        response.text().then(data => { addToLikeList((data * 1) + 1); });
     });
 }
 

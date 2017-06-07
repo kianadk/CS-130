@@ -17,6 +17,23 @@
             <h2> recently liked: </h2>
         </div>
         <div id="likeList">
+            {{#likedProducts}}
+            <a href="{{linkToBuy}}">
+                <div class="likedProd">
+                    <img src="{{productPicture}}"/>
+                    <div class="textBox">
+                        <p>{{productName}}</p>
+                    </div>
+                    <div class="data">
+                        <p>{{numLikes}}likes</p>
+                    </div>
+                    <p id="expand">see description</p>
+                    <p id="description">
+                        {{productDescription}}
+                    </p>
+                </div>
+            </a>
+            {{/likedProducts}}
         </div>
     </div>
     <div class="col-md-9 swipePanel">

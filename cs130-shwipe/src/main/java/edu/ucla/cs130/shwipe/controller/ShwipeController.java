@@ -156,7 +156,7 @@ public class ShwipeController {
             productData.put(productId, data);
         }
 
-        users.get(userId).getLikes().add(new LikedProduct(link, picture, name, description, productId));
+        users.get(userId).getLikes().add(0, new LikedProduct(link, picture, name, description, productId));
     }
 
     @RequestMapping("/addDislikeData")

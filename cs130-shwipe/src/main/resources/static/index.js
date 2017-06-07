@@ -160,7 +160,7 @@ function addToLikeList(like_count){
     desc.setAttribute("id", "description");
     newDiv2.appendChild(desc);
 
-    document.getElementById("likeList").appendChild(link);
+    document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
 
 }
 

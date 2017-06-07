@@ -128,11 +128,15 @@ public class ShwipeController {
 
         ProductResponse response;
         String url = createCategoryInfoRequestUrl(cid, brand_id, offset);
+        System.out.println(url);
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
-        String imageQuery = shortenSearch(response.getProductTitle());
-        String imageUrl = createImageUrl(imageQuery);
-        ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
-        response.replaceImages(imageResponse.getImages());
+        //System.out.println(response);
+        for (int i = 0; i < response.getSize(); i++) {
+            String imageQuery = shortenSearch(response.getProductTitle(i));
+            String imageUrl = createImageUrl(imageQuery);
+            ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
+            response.replaceImages(imageResponse.getImages(), i);
+        }
         return response;
     }
 
@@ -155,6 +159,10 @@ public class ShwipeController {
             data[LIKE_INDEX]++;
             productData.put(productId, data);
         }
+
+        System.out.println("link: " + link);
+        System.out.println("picture: " + picture);
+        System.out.println("description: " + description);
 
         users.get(userId).getLikes().add(new LikedProduct(link, picture, name, description, productId));
     }
@@ -222,7 +230,7 @@ public class ShwipeController {
         String url;
         url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
-                "&start=" + start + "&format=json&results=1";
+                "&start=" + start * 10 + "&format=json&results=10";
         if (brandId != -1L)
             url = url + "&brandId=" + brandId;
         if (minPrice != -1L)

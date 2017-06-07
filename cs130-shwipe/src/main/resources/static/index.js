@@ -2,6 +2,9 @@ var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";
+var currItem = 10;
+var maxItems = 10;
+var itemCache = [];
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
@@ -57,35 +60,48 @@ function logout(){
 
 function getNewShoe(){
     //fetch("/proxy?category=" + gender + "&offset=" + offset++)
-    fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
-    .then(response => {
-        response.json().then(data => {
-            curData  = data.products.product[0];
-
-            var imageURL = curData.images.image[0].value;
-            var imageNode = document.getElementById("currentShoe").firstElementChild;
-
-            var oldMorePics = document.getElementById("morepics");
-
-            if (oldMorePics) {
-                //remove button
-                oldMorePics.remove();
-            }
-
-            if (curData.images.image[1]) {
-                var morePics = document.createElement("button");
-                morePics.setAttribute("type", "button");
-                morePics.setAttribute("class", "btn");
-                morePics.setAttribute("onclick", "getNewPic()");
-                morePics.setAttribute("id", "morepics");
-
-                document.getElementById("shoe-box").appendChild(morePics);
-            }
-
-            imageNode.setAttribute("src", imageURL);
-
+    console.log("cur: " + currItem + " max: " + maxItems);
+    if (currItem == maxItems) {
+        fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
+        .then(response => {
+            response.json().then(data => {
+                itemCache = data.products.product;
+                currItem = 0;
+                newShoeHelper();
+            });
         });
-    });
+    } else {
+        newShoeHelper();
+    }
+
+
+}
+
+function newShoeHelper(){
+    curData  = itemCache[currItem];
+    currItem++;
+    var imageURL = curData.images.image[0].value;
+    console.log(imageURL);
+    var imageNode = document.getElementById("currentShoe").firstElementChild;
+
+    var oldMorePics = document.getElementById("morepics");
+
+    if (oldMorePics) {
+        //remove button
+        oldMorePics.remove();
+    }
+
+    if (curData.images.image[1]) {
+        var morePics = document.createElement("button");
+        morePics.setAttribute("type", "button");
+        morePics.setAttribute("class", "btn");
+        morePics.setAttribute("onclick", "getNewPic()");
+        morePics.setAttribute("id", "morepics");
+
+        document.getElementById("shoe-box").appendChild(morePics);
+    }
+
+    imageNode.setAttribute("src", imageURL);
 }
 
 function like(){

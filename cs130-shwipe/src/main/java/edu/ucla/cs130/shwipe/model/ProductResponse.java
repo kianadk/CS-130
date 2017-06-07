@@ -16,14 +16,16 @@ public class ProductResponse {
                 '}';
     }
 
-    public String getProductTitle(){
-        if (products.product.size() > 0)
-            return products.product.get(0).title;
-        else return null;
+    public int getSize() {
+        return products.product.size();
     }
 
-    public void replaceImages(List<String> imgUrl){
-        products.product.get(0).images.replaceImages(imgUrl);
+    public String getProductTitle(int i){
+        return products.product.get(i).title;
+    }
+
+    public void replaceImages(List<String> imgUrl, int i){
+        products.product.get(i).images.replaceImages(imgUrl);
     }
 
     public static class Products {

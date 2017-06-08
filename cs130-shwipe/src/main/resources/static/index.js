@@ -62,6 +62,8 @@ function getNewShoe(){
     //fetch("/proxy?category=" + gender + "&offset=" + offset++)
     console.log("cur: " + currItem + " max: " + maxItems);
     if (currItem == maxItems) {
+        var imageNode = document.getElementById("currentShoe").firstElementChild;
+        imageNode.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif");
         fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
         .then(response => {
             response.json().then(data => {
@@ -73,8 +75,6 @@ function getNewShoe(){
     } else {
         newShoeHelper();
     }
-
-
 }
 
 function newShoeHelper(){
@@ -176,7 +176,7 @@ function addToLikeList(like_count){
     desc.setAttribute("id", "description");
     newDiv2.appendChild(desc);
 
-    document.getElementById("likeList").appendChild(link);
+    document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
 
 }
 

@@ -106,8 +106,6 @@ function newShoeHelper(){
 
 function like(){
     getLikes();
-    recordLike();
-    getNewShoe();
 }
 
 function getId(){
@@ -134,7 +132,11 @@ function recordLike(){
 function getLikes(){
     fetch("/getLikes?productId=" + curData.id)
     .then(response => {
-        response.text().then(data => { addToLikeList((data * 1) + 1); });
+        response.text().then(data => {
+            addToLikeList((data * 1) + 1);
+            recordLike();
+            getNewShoe();
+        });
     });
 }
 

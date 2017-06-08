@@ -2,6 +2,7 @@ var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";
+var male, female, kids = true;
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
@@ -185,3 +186,39 @@ function getNewPic(){
     imageNode.setAttribute("src", imageURL);
 }
 
+function setMale() {
+    male = document.getElementById("genderMale").checked;
+}
+
+function setFemale() {
+    female = document.getElementById("genderFemale").checked;
+}
+
+function setKids() {
+    kids = document.getElementById("genderKids").checked;
+}
+
+function setPreferences() {
+   var query = "/addPreferences?category=";
+   var first = true;
+
+   if (male) {
+        query = query.concat("men");
+        first = false;
+   }
+   if (female) {
+        if (!first){ query = query.concat(","); }
+        query = query.concat("women");
+        first = false;
+   }
+   if (kids) {
+        if (!first){ query = query.concat(","); }
+        query = query.concat("kids");
+   }
+
+   query = query.concat("&brand=209412,255224&minPrice=10&maxPrice=10000&userId=" + getId());
+   console.log(query);
+
+   fetch(query);
+   offset = 0;
+}

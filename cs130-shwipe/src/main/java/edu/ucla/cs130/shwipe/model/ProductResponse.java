@@ -27,7 +27,7 @@ public class ProductResponse {
     }
 
     public static class Products {
-        public List<Product> product;
+        public List<Product> product = new ArrayList<Product>();
         public Long includedResults;
         public Long totalResults;
 

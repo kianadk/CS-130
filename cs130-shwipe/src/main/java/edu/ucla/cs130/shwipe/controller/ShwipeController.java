@@ -31,12 +31,17 @@ public class ShwipeController {
 
     private HashMap<String, int[]> productData = new HashMap<String, int[]>();
     private HashMap<String, UserData> users = new HashMap<String, UserData>();
-    private List<String> category_preferences = new ArrayList<String>();
-    private List<String> brand_preferences = new ArrayList<String>();
-    private int minPrice = -1;
-    private int maxPrice = -1;
+//    private List<String> category_preferences = new ArrayList<String>();
+//    private List<String> brand_preferences = new ArrayList<String>();
+//    private int minPrice = -1;
+//    private int maxPrice = -1;
     private int category_index = 0;
     private int brand_index = 0;
+    private Long[] default_categories = { MENS, WOMENS, KIDS };
+    private int default_index = 0;
+    private int offset = 0;
+
+
 
     @Autowired
     RestTemplate restTemplate;
@@ -95,44 +100,93 @@ public class ShwipeController {
 
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody
-    public ProductResponse proxy(@RequestParam(name = "offset") int offset,
-                                 @RequestParam(name = "userId") String userId) {
+    public ProductResponse proxy(@RequestParam(name = "userId") String userId) {
+
         Long cid;
-        int categories_size = category_preferences.size();
-        if (categories_size == 0)
-            cid = KIDS;
-        else {
-            category_index %= categories_size;
-            if (category_preferences.get(category_index).equals("men"))
-                cid = MENS;
-            else if (category_preferences.get(category_index).equals("women"))
-                cid = WOMENS;
-            else
-                cid = KIDS;
-            category_index++;
-
-        }
-        offset %=250;
         Long brand_id;
-        int brands_size = brand_preferences.size();
-        if (brands_size == 0)
-            brand_id = -1L;
-        else {
-            if (brand_preferences.get(brand_index).equals(""))
+        int min = 100;
+        int max = 100000000;
+
+
+        if (users.containsKey(userId)){
+            UserData user = users.get(userId);
+            Preferences preference = user.getPreferences();
+
+            int categories_size = preference.category_preferences.size();
+
+            if (categories_size == 0){
+                cid = default_categories[default_index];
+                default_index++;
+                default_index %= 3;
+            }
+            else {
+                if (preference.category_preferences.get(category_index).equals("men"))
+                    cid = MENS;
+                else if (preference.category_preferences.get(category_index).equals("women"))
+                    cid = WOMENS;
+                else
+                    cid = KIDS;
+                category_index++;
+                category_index %= categories_size;
+
+            }
+            offset %=250;
+
+            int brands_size = preference.brand_preferences.size();
+            if (brands_size == 0)
                 brand_id = -1L;
-            else
-                brand_id = Long.parseLong(brand_preferences.get(brand_index), 10);
-            brand_index++;
-            brand_index %= brands_size;
+            else {
+                if (preference.brand_preferences.get(brand_index).equals(""))
+                    brand_id = -1L;
+                else
+                    brand_id = Long.parseLong(preference.brand_preferences.get(brand_index), 10);
+                brand_index++;
+                brand_index %= brands_size;
+            }
+
+            min = preference.min;
+            max = preference.max;
+        }
+        else {
+            cid = default_categories[default_index];
+            default_index++;
+            default_index %= 3;
+            brand_id = -1L;
         }
 
+        ProductResponse response = getResponse(cid, brand_id, min, max, offset);
+        if (response.products.includedResults == 0) {
+            cid = default_categories[default_index];
+            default_index++;
+            default_index %= 3;
+            brand_id = -1L;
+            response = getResponse(cid, brand_id, min, max, offset);
+        }
+        offset++;
+        return response;
+    }
+
+    private ProductResponse getResponse(Long cid, Long brand_id, int min, int max, int offset){
+        ProductCheckResponse response_check;
         ProductResponse response;
-        String url = createCategoryInfoRequestUrl(cid, brand_id, offset);
+        String url = createCategoryInfoRequestUrl(cid, brand_id, min, max, offset);
+        System.out.println(url);
+        response_check = restTemplate.getForEntity(url, ProductCheckResponse.class).getBody();
+        if (response_check.products.includedResults == 0) {
+            cid = default_categories[default_index];
+            default_index++;
+            default_index %= 3;
+            brand_id = -1L;
+            url = createCategoryInfoRequestUrl(cid, brand_id, min, max, offset);
+
+        }
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
+
         String imageQuery = shortenSearch(response.getProductTitle());
         String imageUrl = createImageUrl(imageQuery);
         ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
         response.replaceImages(imageResponse.getImages());
+        System.out.print(response.products.product.get(0).categoryId + " " + response.products.product.get(0).title);
         return response;
     }
 
@@ -155,6 +209,7 @@ public class ShwipeController {
             data[LIKE_INDEX]++;
             productData.put(productId, data);
         }
+
 
         users.get(userId).getLikes().add(new LikedProduct(link, picture, name, description, productId));
     }
@@ -182,24 +237,29 @@ public class ShwipeController {
                                @RequestParam(name = "minPrice") String minP,
                                @RequestParam(name = "maxPrice") String maxP,
                                @RequestParam(name = "userId") String userId){
-        List<String> categories = Arrays.asList(category.split("\\s*,\\s*"));
-        category_preferences.clear();
-        for (String c : categories) {
-            if (!category_preferences.contains(c)) {
-                category_preferences.add(c);
-            }
-        }
-        List<String> brands = Arrays.asList(brand.split("\\s*,\\s*"));
-        brand_preferences.clear();
-        for (String b : brands) {
-            if (!brand_preferences.contains(b)) {
-                brand_preferences.add(b);
-            }
-        }
-        if (!minP.equals(""))
-            minPrice = Integer.parseInt(minP);
-        if (!maxP.equals(""))
-            maxPrice = Integer.parseInt(maxP);
+//        List<String> categories = Arrays.asList(category.split("\\s*,\\s*"));
+//        category_preferences.clear();
+//        for (String c : categories) {
+//            if (!category_preferences.contains(c)) {
+//                category_preferences.add(c);
+//            }
+//        }
+//        List<String> brands = Arrays.asList(brand.split("\\s*,\\s*"));
+//        brand_preferences.clear();
+//        for (String b : brands) {
+//            if (!brand_preferences.contains(b)) {
+//                brand_preferences.add(b);
+//            }
+//        }
+//        if (!minP.equals(""))
+//            minPrice = Integer.parseInt(minP);
+//        if (!maxP.equals(""))
+//            maxPrice = Integer.parseInt(maxP);
+        if (users.containsKey(userId))
+            users.get(userId).addPreferences(category, brand, minP, maxP);
+        brand_index = 0;
+        category_index = 0;
+        offset = 0;
     }
 
     @RequestMapping(value="/brand", produces="Application/json")
@@ -218,10 +278,10 @@ public class ShwipeController {
         return url;
     }
 
-    private String createCategoryInfoRequestUrl(Long productId, Long brandId, int start) {
+    private String createCategoryInfoRequestUrl(Long categoryId, Long brandId, int minPrice, int maxPrice, int start) {
         String url;
         url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
-                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + productId +
+                + apiKey + "&publisherId=" + publisherId + "&categoryId=" + categoryId +
                 "&start=" + start + "&format=json&results=1";
         if (brandId != -1L)
             url = url + "&brandId=" + brandId;

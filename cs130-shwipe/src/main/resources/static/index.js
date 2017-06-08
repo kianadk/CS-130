@@ -77,6 +77,15 @@ function getNewShoe(){
     }
 }
 
+document.onkeydown = function handleKeyPress(e){
+    if(e.keyCode == 37){
+        dislike();
+    }
+    else if(e.keyCode == 39){
+        like();
+    }
+}
+
 function newShoeHelper(){
     curData  = itemCache[currItem];
     currItem++;

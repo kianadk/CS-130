@@ -1,4 +1,4 @@
-var offset = 0;
+//var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";
@@ -58,7 +58,7 @@ function logout(){
 
 function getNewShoe(){
     //fetch("/proxy?category=" + gender + "&offset=" + offset++)
-    fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
+    fetch("/proxy?userId=" + getId())
     .then(response => {
         response.json().then(data => {
             curData  = data.products.product[0];
@@ -161,7 +161,7 @@ function addToLikeList(like_count){
     desc.setAttribute("id", "description");
     newDiv2.appendChild(desc);
 
-    document.getElementById("likeList").appendChild(link);
+    document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
 
 }
 

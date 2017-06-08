@@ -5,6 +5,7 @@ var count = "-";
 var currItem = 10;
 var maxItems = 10;
 var itemCache = [];
+var likesEnabled = false;
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
@@ -63,6 +64,7 @@ function getNewShoe(){
     console.log("cur: " + currItem + " max: " + maxItems);
     if (currItem == maxItems) {
         var imageNode = document.getElementById("currentShoe").firstElementChild;
+        likesEnabled = false;
         imageNode.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif");
         fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
         .then(response => {
@@ -111,10 +113,13 @@ function newShoeHelper(){
     }
 
     imageNode.setAttribute("src", imageURL);
+    likesEnabled = true;
 }
 
 function like(){
-    getLikes();
+    if(likesEnabled){
+        getLikes();
+    }
 }
 
 function getId(){
@@ -124,8 +129,10 @@ function getId(){
 }
 
 function dislike(){
-    recordDislike();
-    getNewShoe();
+    if(likesEnabled){
+        recordDislike();
+        getNewShoe();
+    }
 }
 
 function recordDislike(){

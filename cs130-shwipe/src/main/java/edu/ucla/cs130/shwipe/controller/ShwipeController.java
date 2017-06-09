@@ -39,7 +39,7 @@ public class ShwipeController {
     private int brand_index = 0;
     private Long[] default_categories = { MENS, WOMENS, KIDS };
     private int default_index = 0;
-    private int offset = 0;
+    private int defaultOffset = 0;
 
 
 
@@ -100,7 +100,8 @@ public class ShwipeController {
 
     @RequestMapping(value="/proxy", produces="Application/json")
     @ResponseBody
-    public ProductResponse proxy(@RequestParam(name = "userId") String userId) {
+    public ProductResponse proxy(@RequestParam(name = "offset") int offset,
+                                 @RequestParam(name = "userId") String userId) {
 
         Long cid;
         Long brand_id;
@@ -130,7 +131,7 @@ public class ShwipeController {
                 category_index %= categories_size;
 
             }
-            offset %=250;
+            defaultOffset %=250;
 
             int brands_size = preference.brand_preferences.size();
             if (brands_size == 0)
@@ -160,9 +161,9 @@ public class ShwipeController {
             default_index++;
             default_index %= 3;
             brand_id = -1L;
-            response = getResponse(cid, brand_id, min, max, offset);
+            response = getResponse(cid, brand_id, min, max, defaultOffset);
+            defaultOffset++;
         }
-        offset++;
         return response;
     }
 
@@ -182,11 +183,14 @@ public class ShwipeController {
         }
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
 
-        String imageQuery = shortenSearch(response.getProductTitle());
-        String imageUrl = createImageUrl(imageQuery);
-        ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
-        response.replaceImages(imageResponse.getImages());
-        System.out.print(response.products.product.get(0).categoryId + " " + response.products.product.get(0).title);
+        for (int i = 0; i < response.getSize(); i++) {
+            System.out.print(response.products.product.get(i).categoryId + " " + response.products.product.get(i).title);
+            String imageQuery = shortenSearch(response.getProductTitle(i));
+            String imageUrl = createImageUrl(imageQuery);
+            ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
+            response.replaceImages(imageResponse.getImages(), i);
+        }
+
         return response;
     }
 
@@ -209,6 +213,10 @@ public class ShwipeController {
             data[LIKE_INDEX]++;
             productData.put(productId, data);
         }
+        System.out.println("link: " + link);
+        System.out.println("picture: " + picture);
+        System.out.println("description: " + description);
+
         users.get(userId).getLikes().add(0, new LikedProduct(link, picture, name, description, productId));
     }
 
@@ -257,7 +265,6 @@ public class ShwipeController {
             users.get(userId).addPreferences(category, brand, minP, maxP);
         brand_index = 0;
         category_index = 0;
-        offset = 0;
     }
 
     @RequestMapping(value="/brand", produces="Application/json")
@@ -280,7 +287,7 @@ public class ShwipeController {
         String url;
         url = "http://catalog.bizrate.com/services/catalog/v1/api/product?apiKey="
                 + apiKey + "&publisherId=" + publisherId + "&categoryId=" + categoryId +
-                "&start=" + start + "&format=json&results=1";
+                "&start=" + start * 10 + "&format=json&results=10";
         if (brandId != -1L)
             url = url + "&brandId=" + brandId;
         if (minPrice != -1L)

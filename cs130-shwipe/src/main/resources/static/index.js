@@ -1,8 +1,11 @@
-//var offset = 0;
+var offset = 0;
 var gender = "women";
 var curData = "http://www.runnersworld.com/sites/runnersworld.com/files/styles/slideshow-desktop/public/nike_free_rn_distance_m_400.jpg?itok=lvNFjcGt";
 var count = "-";
-var male, female, kids = true;
+var currItem = 10;
+var maxItems = 10;
+var itemCache = [];
+var likesEnabled = false;
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
@@ -58,41 +61,65 @@ function logout(){
 
 function getNewShoe(){
     //fetch("/proxy?category=" + gender + "&offset=" + offset++)
-    fetch("/proxy?userId=" + getId())
-    .then(response => {
-        response.json().then(data => {
-            curData  = data.products.product[0];
-
-            var imageURL = curData.images.image[0].value;
-            var imageNode = document.getElementById("currentShoe").firstElementChild;
-
-            var oldMorePics = document.getElementById("morepics");
-
-            if (oldMorePics) {
-                //remove button
-                oldMorePics.remove();
-            }
-
-            if (curData.images.image[1]) {
-                var morePics = document.createElement("button");
-                morePics.setAttribute("type", "button");
-                morePics.setAttribute("class", "btn");
-                morePics.setAttribute("onclick", "getNewPic()");
-                morePics.setAttribute("id", "morepics");
-
-                document.getElementById("shoe-box").appendChild(morePics);
-            }
-
-            imageNode.setAttribute("src", imageURL);
-
+    console.log("cur: " + currItem + " max: " + maxItems);
+    if (currItem == maxItems) {
+        var imageNode = document.getElementById("currentShoe").firstElementChild;
+        likesEnabled = false;
+        imageNode.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif");
+        fetch("/proxy?offset=" + offset++ + "&userId=" + getId())
+        .then(response => {
+            response.json().then(data => {
+                itemCache = data.products.product;
+                currItem = 0;
+                newShoeHelper();
+            });
         });
-    });
+    } else {
+        newShoeHelper();
+    }
+}
+
+document.onkeydown = function handleKeyPress(e){
+    if(e.keyCode == 37){
+        dislike();
+    }
+    else if(e.keyCode == 39){
+        like();
+    }
+}
+
+function newShoeHelper(){
+    curData  = itemCache[currItem];
+    currItem++;
+    var imageURL = curData.images.image[0].value;
+    console.log(imageURL);
+    var imageNode = document.getElementById("currentShoe").firstElementChild;
+
+    var oldMorePics = document.getElementById("morepics");
+
+    if (oldMorePics) {
+        //remove button
+        oldMorePics.remove();
+    }
+
+    if (curData.images.image[1]) {
+        var morePics = document.createElement("button");
+        morePics.setAttribute("type", "button");
+        morePics.setAttribute("class", "btn");
+        morePics.setAttribute("onclick", "getNewPic()");
+        morePics.setAttribute("id", "morepics");
+
+        document.getElementById("shoe-box").appendChild(morePics);
+    }
+
+    imageNode.setAttribute("src", imageURL);
+    likesEnabled = true;
 }
 
 function like(){
-    getLikes();
-    recordLike();
-    getNewShoe();
+    if(likesEnabled){
+        getLikes();
+    }
 }
 
 function getId(){
@@ -102,8 +129,10 @@ function getId(){
 }
 
 function dislike(){
-    recordDislike();
-    getNewShoe();
+    if(likesEnabled){
+        recordDislike();
+        getNewShoe();
+    }
 }
 
 function recordDislike(){
@@ -119,7 +148,11 @@ function recordLike(){
 function getLikes(){
     fetch("/getLikes?productId=" + curData.id)
     .then(response => {
-        response.text().then(data => { addToLikeList((data * 1) + 1); });
+        response.text().then(data => {
+            addToLikeList((data * 1) + 1);
+            recordLike();
+            getNewShoe();
+        });
     });
 }
 
@@ -184,41 +217,4 @@ function getNewPic(){
     else { imageURL = curData.images.image[0].value; }
 
     imageNode.setAttribute("src", imageURL);
-}
-
-function setMale() {
-    male = document.getElementById("genderMale").checked;
-}
-
-function setFemale() {
-    female = document.getElementById("genderFemale").checked;
-}
-
-function setKids() {
-    kids = document.getElementById("genderKids").checked;
-}
-
-function setPreferences() {
-   var query = "/addPreferences?category=";
-   var first = true;
-
-   if (male) {
-        query = query.concat("men");
-        first = false;
-   }
-   if (female) {
-        if (!first){ query = query.concat(","); }
-        query = query.concat("women");
-        first = false;
-   }
-   if (kids) {
-        if (!first){ query = query.concat(","); }
-        query = query.concat("kids");
-   }
-
-   query = query.concat("&brand=209412,255224&minPrice=10&maxPrice=10000&userId=" + getId());
-   console.log(query);
-
-   fetch(query);
-   offset = 0;
 }

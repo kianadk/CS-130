@@ -56,15 +56,16 @@ html,body {
     text-align: center;
 }
 
-.swipePanel h1 {
-    text-align: center;
-    font-size: 150px;
-    font-weight: 100;
+.shwipeHead {
+    height: 30%;
+    max-width: 90%;
+    margin: auto;
 }
 
-.title {
-    max-height: 20%;
-    max-width: 100%;
+
+.shwipeHead img {
+    height: 90%;
+    margin: auto auto auto auto;
 }
 
 .shoe-box {
@@ -73,11 +74,21 @@ html,body {
     position: relative;
     justify-content: center;
     align-items: center;
-    height: 70%;
-    max-width: 75%;
+    height: 65%;
+    max-width: 80%;
     /*height: 500px;*/
     vertical-align: center;
     margin-bottom: 10px;
+}
+
+.btn {
+  width: 7.5%;
+  display: inline-block;
+}
+
+#currentShoe {
+    display: inline;
+    height: 80%;
 }
 
 .shoePicture{
@@ -85,20 +96,6 @@ html,body {
     height: 100%;
     display: inline;
     margin: auto;
-}
-
-.swiper {
-    display: inline-block;
-}
-
-#currentShoe {
-    display: inline;
-    height: 100%;
-}
-
-.btn {
-  width: 75px;
-  display: inline-block;
 }
 
 #description {
@@ -127,6 +124,10 @@ html,body {
 .genderPrefs p {
     display: inline-block;
     color: white;
+    vertical-align: center;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 #genderMale,

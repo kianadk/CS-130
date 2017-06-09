@@ -6,6 +6,9 @@ var currItem = 10;
 var maxItems = 10;
 var itemCache = [];
 var likesEnabled = false;
+var male = true;
+var female = true;
+var kids = true;
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
@@ -217,4 +220,41 @@ function getNewPic(){
     else { imageURL = curData.images.image[0].value; }
 
     imageNode.setAttribute("src", imageURL);
+}
+
+function setMale() {
+    male = document.getElementById("genderMale").checked;
+}
+
+function setFemale() {
+    female = document.getElementById("genderFemale").checked;
+}
+
+function setKids() {
+    kids = document.getElementById("genderKids").checked;
+}
+
+function setPreferences() {
+   var query = "/addPreferences?category=";
+   var first = true;
+
+   if (male) {
+        query = query.concat("men");
+        first = false;
+   }
+   if (female) {
+        if (!first){ query = query.concat(","); }
+        query = query.concat("women");
+        first = false;
+   }
+   if (kids) {
+        if (!first){ query = query.concat(","); }
+        query = query.concat("kids");
+   }
+
+   query = query.concat("&brand=209412,255224&minPrice=10&maxPrice=10000&userId=" + getId());
+   console.log(query);
+
+   fetch(query);
+   offset = 0;
 }

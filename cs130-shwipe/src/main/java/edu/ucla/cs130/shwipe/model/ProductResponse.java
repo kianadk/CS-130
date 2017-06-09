@@ -142,11 +142,11 @@ public class ProductResponse {
                     newList.add(image.get(3));
             }
             int newSize = imgUrl.size();
-            System.out.println("number of flickr images: " + newSize);
             for(int i = 0; i < newSize; i++){
                 newList.add(new Image(imgUrl.get(i)));
             }
             image = newList;
+            System.out.println("number of iamges: " + newList.size());
 
 //            int counter = 0;
 //            int size = (newSize <= oldSize) ? newSize : oldSize;

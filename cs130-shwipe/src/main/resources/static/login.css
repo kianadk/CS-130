@@ -1,0 +1,56 @@
+.jumbotron .container{
+	text-align: center;
+	color: white;
+}
+
+.jumbotron .container h1{
+    font-size:  180px;
+    padding-top: 200px;
+    margin-bottom: -20px;
+}
+
+.jumbotron .container button{
+    vertical-align:center;
+    background: rgba(255, 255, 255, 0.6);
+    color: #000000;
+    border: 3px solid #99ffff;
+    margin-top: 20px;
+    width: 260px;
+}
+
+.jumbotron {
+	background: url(cover_photo.jpg) no-repeat center;
+	background-repeat: no-repeat;
+	background-position: top;
+	height: 900px;
+	background-size: cover;
+}
+
+.about .about_info button{
+    vertical-align:center;
+    background: rgba(255, 255, 255, 0.6);
+    color: #000000;
+    border: 3px solid #99ffff;
+    margin-top: 30px;
+}
+
+.about {
+    background: url(macbook.jpg) no-repeat center;
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 900px;
+    background-size: cover;
+}
+
+.about .about_info h2{
+    text-align: center;
+}
+
+.about .about_info p{
+    font-size: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    background-color: rgba(255, 255, 255, 0.7);
+}

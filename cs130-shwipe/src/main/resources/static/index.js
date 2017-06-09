@@ -5,6 +5,8 @@ var count = "-";
 var currItem = 10;
 var maxItems = 10;
 var itemCache = [];
+var itemLoop = 0;
+var currPic = 0;
 var likesEnabled = false;
 var male = true;
 var female = true;
@@ -98,6 +100,8 @@ function newShoeHelper(){
     curData  = itemCache[currItem];
     currItem++;
     var imageURL = curData.images.image[0].value;
+    itemLoop = curData.images.image.length;
+    currPic = 0;
     console.log(imageURL);
     var imageNode = document.getElementById("currentShoe").firstElementChild;
 
@@ -212,19 +216,22 @@ function getNewPic(){
     var imageURL;
     var imageNode = document.getElementById("currentShoe").firstElementChild;
 
-    if (curData.images.image[0].value == imageNode.getAttribute("src")) {
-        imageURL = curData.images.image[1].value;
-    }
-    else if (curData.images.image[1].value == imageNode.getAttribute("src") && curData.images.image[2]) {
-        imageURL = curData.images.image[2].value;
-    }
-    else if (curData.images.image[2].value == imageNode.getAttribute("src") && curData.images.image[3]) {
-         imageURL = curData.images.image[3].value;
-    }
-    else if (curData.images.image[3].value == imageNode.getAttribute("src") && curData.images.image[4]) {
-        imageURL = curData.images.image[4].value;
-    }
-    else { imageURL = curData.images.image[0].value; }
+    imageURL = curData.images.image[currPic % itemLoop].value;
+    currPic++;
+
+//    if (curData.images.image[0].value == imageNode.getAttribute("src")) {
+//        imageURL = curData.images.image[1].value;
+//    }
+//    else if (curData.images.image[1].value == imageNode.getAttribute("src") && curData.images.image[2]) {
+//        imageURL = curData.images.image[2].value;
+//    }
+//    else if (curData.images.image[2].value == imageNode.getAttribute("src") && curData.images.image[3]) {
+//         imageURL = curData.images.image[3].value;
+//    }
+//    else if (curData.images.image[3].value == imageNode.getAttribute("src") && curData.images.image[4]) {
+//        imageURL = curData.images.image[4].value;
+//    }
+//    else { imageURL = curData.images.image[0].value; }
 
     imageNode.setAttribute("src", imageURL);
 }

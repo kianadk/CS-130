@@ -146,7 +146,7 @@ public class ProductResponse {
                 newList.add(new Image(imgUrl.get(i)));
             }
             image = newList;
-            System.out.println("number of iamges: " + newList.size());
+            System.out.println("number of images: " + newList.size());
 
 //            int counter = 0;
 //            int size = (newSize <= oldSize) ? newSize : oldSize;

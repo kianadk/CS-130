@@ -209,23 +209,8 @@ function getNewPic(){
     var imageURL;
     var imageNode = document.getElementById("currentShoe").firstElementChild;
 
-    imageURL = curData.images.image[currPic % itemLoop].value;
     currPic++;
-
-//    if (curData.images.image[0].value == imageNode.getAttribute("src")) {
-//        imageURL = curData.images.image[1].value;
-//    }
-//    else if (curData.images.image[1].value == imageNode.getAttribute("src") && curData.images.image[2]) {
-//        imageURL = curData.images.image[2].value;
-//    }
-//    else if (curData.images.image[2].value == imageNode.getAttribute("src") && curData.images.image[3]) {
-//         imageURL = curData.images.image[3].value;
-//    }
-//    else if (curData.images.image[3].value == imageNode.getAttribute("src") && curData.images.image[4]) {
-//        imageURL = curData.images.image[4].value;
-//    }
-//    else { imageURL = curData.images.image[0].value; }
-
+    imageURL = curData.images.image[currPic % itemLoop].value;
     imageNode.setAttribute("src", imageURL);
 }
 

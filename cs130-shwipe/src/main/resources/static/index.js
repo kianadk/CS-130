@@ -87,6 +87,7 @@ function getNewShoe(){
         .then(response => {
             response.json().then(data => {
                 itemCache = data.products.product;
+                maxItems = itemCache.length;
                 currItem = 0;
                 newShoeHelper();
             });
@@ -111,6 +112,7 @@ document.onkeydown = function handleKeyPress(e){
 function newShoeHelper(){
     curData  = itemCache[currItem];
     currItem++;
+    console.log("num images: " + curData.images.image.length);
     var imageURL = curData.images.image[0].value;
     itemLoop = curData.images.image.length;
     currPic = 0;

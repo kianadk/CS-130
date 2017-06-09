@@ -171,7 +171,6 @@ public class ShwipeController {
         ProductCheckResponse response_check;
         ProductResponse response;
         String url = createCategoryInfoRequestUrl(cid, brand_id, min, max, offset);
-        System.out.println(url);
         response_check = restTemplate.getForEntity(url, ProductCheckResponse.class).getBody();
         if (response_check.products.includedResults == 0) {
             cid = default_categories[default_index];
@@ -184,12 +183,12 @@ public class ShwipeController {
         response = restTemplate.getForEntity(url, ProductResponse.class).getBody();
 
         for (int i = 0; i < response.getSize(); i++) {
-            System.out.print(response.products.product.get(i).categoryId + " " + response.products.product.get(i).title);
             String imageQuery = shortenSearch(response.getProductTitle(i));
             String imageUrl = createImageUrl(imageQuery);
             ImageResponse imageResponse = restTemplate.getForEntity(imageUrl, ImageResponse.class).getBody();
             response.replaceImages(imageResponse.getImages(), i);
         }
+        System.out.println(response);
 
         return response;
     }
@@ -213,9 +212,6 @@ public class ShwipeController {
             data[LIKE_INDEX]++;
             productData.put(productId, data);
         }
-        System.out.println("link: " + link);
-        System.out.println("picture: " + picture);
-        System.out.println("description: " + description);
 
         users.get(userId).getLikes().add(0, new LikedProduct(link, picture, name, description, productId));
     }

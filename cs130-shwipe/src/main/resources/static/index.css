@@ -56,10 +56,16 @@ html,body {
     text-align: center;
 }
 
-.swipePanel h1 {
-    text-align: center;
-    font-size: 150px;
-    font-weight: 100;
+.shwipeHead {
+    height: 30%;
+    max-width: 90%;
+    margin: auto;
+}
+
+
+.shwipeHead img {
+    height: 90%;
+    margin: auto auto auto auto;
 }
 
 .shoe-box {
@@ -68,29 +74,28 @@ html,body {
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 700px;
-    height: 500px;
+    height: 65%;
+    max-width: 80%;
+    /*height: 500px;*/
     vertical-align: center;
+    margin-bottom: 10px;
 }
 
-.shoePicture{
-    height: 500px;
-    width: 500px;
-    display: inline;
-    margin: auto;
-}
-
-.swiper {
-    display: inline-block;
+.btn {
+  width: 7.5%;
+  display: inline-block;
 }
 
 #currentShoe {
     display: inline;
+    height: 80%;
 }
 
-.btn {
+.shoePicture{
+    /*height: 500px;*/
+    height: 100%;
     display: inline;
-    width: 75px;
+    margin: auto;
 }
 
 #description {
@@ -99,4 +104,62 @@ html,body {
 
 #expand:hover + #description {
     display: block;
+}
+
+.prefBar {
+    display: inline;
+    position: static;
+    float: left;
+    width: 100%;
+    height: 5%;
+    background-color: black;
+}
+
+.genderPrefs {
+    display: inline-block;
+    align: left;
+    float: left;
+}
+
+.genderPrefs p {
+    display: inline-block;
+    color: white;
+    vertical-align: center;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#genderMale,
+#genderFemale,
+#genderKids {
+    display: inline-block;
+}
+
+.buttons {
+    /*float: right;*/
+    background-color: black; /* Blue */
+    border: none;
+    color: white;
+    /*padding: 16px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    height: 100%;
+    /*margin: 4px 2px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+
+.buttons {
+    float: right;
+    background-color: black;
+    color: white;
+}
+
+.buttons:hover {
+    background-color: white;
+    color: black;
 }

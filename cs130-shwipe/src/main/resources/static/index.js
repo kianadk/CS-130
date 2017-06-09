@@ -91,6 +91,9 @@ document.onkeydown = function handleKeyPress(e){
     else if(e.keyCode == 39){
         like();
     }
+    else if(e.keyCode == 40){
+        getNewPic();
+    }
 }
 
 function newShoeHelper(){
@@ -112,11 +115,11 @@ function newShoeHelper(){
     if (curData.images.image[1]) {
         var morePics = document.createElement("button");
         morePics.setAttribute("type", "button");
-        morePics.setAttribute("class", "btn");
         morePics.setAttribute("onclick", "getNewPic()");
         morePics.setAttribute("id", "morepics");
+        morePics.innerHTML = "MORE PICS"
 
-        document.getElementById("shoe-box").appendChild(morePics);
+        document.getElementById("morePicsButtonDiv").appendChild(morePics);
     }
 
     imageNode.setAttribute("src", imageURL);
@@ -164,44 +167,50 @@ function getLikes(){
 }
 
 function addToLikeList(like_count){
-    var newPara = document.createElement("p");
-    var newPara1 = document.createElement("p");
-    var t = document.createTextNode(curData.title);
-    //console.log(like_count);
-    var t1 = document.createTextNode(like_count + " likes");
-    newPara.appendChild(t);
-    newPara1.appendChild(t1);
-    var newImg = document.createElement("img");
-    newImg.setAttribute("src", document.getElementById("currentShoe").firstElementChild.getAttribute("src"));
-    var newDiv1 = document.createElement("div");
-    newDiv1.setAttribute("class", "textBox");
-    newDiv1.appendChild(newPara);
-    var newDiv3 = document.createElement("div");
-    newDiv3.setAttribute("class", "data");
-    newDiv3.appendChild(newPara1);
-    var newDiv2 = document.createElement("div");
-    newDiv2.setAttribute("class", "likedProd");
-    newDiv2.appendChild(newImg);
-    newDiv2.appendChild(newDiv1);
-    newDiv2.appendChild(newDiv3);
-
-    var expand = document.createElement("p");
-    var t2 = document.createTextNode("see description");
-    expand.appendChild(t2);
-    expand.setAttribute("id", "expand");
-    newDiv2.appendChild(expand);
+    var title = document.createElement("p");
+    var likes = document.createElement("p");
+    var titleText = document.createTextNode(curData.title);
+    var likeText = document.createTextNode(like_count + " likes");
+    title.appendChild(titleText);
+    likes.appendChild(likeText);
 
     var link = document.createElement("a");
     link.setAttribute("href", curData.url.value);
-    link.appendChild(newDiv2);
+    link.appendChild(title);
+
+    var newImg = document.createElement("img");
+    newImg.setAttribute("src", document.getElementById("currentShoe").firstElementChild.getAttribute("src"));
+    newImg.setAttribute("class", "likedProdImg");
+
+    var textBox = document.createElement("div");
+    textBox.setAttribute("class", "textBox");
+    textBox.appendChild(link);
+
+    var likesData = document.createElement("div");
+    likesData.setAttribute("class", "data");
+    likesData.appendChild(likes);
+    var likedProd = document.createElement("div");
+    likedProd.setAttribute("class", "likedProd");
+    likedProd.appendChild(newImg);
+    likedProd.appendChild(textBox);
+    likedProd.appendChild(likesData);
+
+
+    var expand = document.createElement("div");
+    expand.setAttribute("id", "expand");
+    var see = document.createElement("p");
+    var t2 = document.createTextNode(">> see description");
+    see.appendChild(t2);
+    expand.appendChild(see);
 
     var desc = document.createElement("p");
     var t3 = document.createTextNode(curData.description);
     desc.appendChild(t3);
     desc.setAttribute("id", "description");
-    newDiv2.appendChild(desc);
+    expand.appendChild(desc);
+    likedProd.appendChild(expand);
 
-    document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
+    document.getElementById("likeList").insertBefore(likedProd, document.getElementById("likeList").firstElementChild);
 
 }
 
@@ -244,7 +253,20 @@ function setPreferences() {
         query = query.concat("kids");
    }
 
-   query = query.concat("&brand=209412,255224&minPrice=10&maxPrice=10000&userId=" + getId());
+   var min = document.getElementById("minPrice").value;
+   var max = document.getElementById("maxPrice").value;
+
+   if(!min || !max) {
+        min = 0;
+        max = 100000;
+   }
+
+   query = query.concat("&minPrice=" + min + "&maxPrice=" + max);
+
+   query = query.concat("&brand=209412,255224");
+   //209412,255224
+
+   query = query.concat("&userId=" + getId());
    console.log(query);
 
    fetch(query);

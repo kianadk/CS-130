@@ -3,12 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/login.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/login.js"></script>
     <title>Shwipe</title>
 </head>
 <body>
-<button type="button" class="btn" onclick="FB.login(loginCallback)">Log in</button>
+    <div class="jumbotron" id="top">
+        <div class="container">
+            <h1>Shwipe</h1>
+            <h3>the shoe swiper.</h3>
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-default btn-lg" onclick="FB.login(loginCallback)">Login with Facebook</button>
+            </div>
+            <h2></h2>
+            <div class="col-xs-12">
+                <button type="button" id="learn" class="btn btn-default btn-lg" >Learn More</button>
+            </div>
+        </div>
+    </div>
+    <div class="about" id="aboutscroll">
+
+        <div class ="about_info">
+            <h2>About Us</h2>
+            <p>Shwipe is the premiere casual shoe browsing application that allows users to effortlessly view the newest shoes. It differentiates itself from
+                other shopping apps by bridging the gap between marketing and social media. Shwipe sources its photos from Flickr, to bring you a dynamic range of pictures
+                showcasing how shoes are used in people's lives.  We believe that this keeps the shopping experience exciting for customers, and can give a more
+                accurate representation of how these shoes will look when worn.  The signup process is simple - just login with Facebook and you're good to go!
+                What are you waiting for? Start Shwiping!</p>
+            <div class="col-xs-12 text-center">
+                <button type="button" id="back" class="btn btn-default btn-lg" >Back To Top</button>
+            </div>
+        </div>
+    </div>
 </body>
+<footer>
+    <script type="text/javascript">
+			$("#learn").click(function() {
+			    $('html, body').animate({
+			        scrollTop: $("#aboutscroll").offset().top
+			    }, 'fast');
+			    return false;
+			});
+		</script>
+    <script type="text/javascript">
+			$("#back").click(function() {
+			    $('html, body').animate({
+			        scrollTop: $("#top").offset().top
+			    }, 'fast');
+			    return false;
+			});
+		</script>
+</footer>
 </html>

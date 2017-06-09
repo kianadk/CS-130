@@ -319,4 +319,5 @@ function setPreferences() {
    offset = 0;
 
    currItem = maxItems;
+   getNewShoe();
 }

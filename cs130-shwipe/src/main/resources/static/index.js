@@ -315,4 +315,6 @@ function setPreferences() {
 
    fetch(query);
    offset = 0;
+
+   currItem = maxItems;
 }

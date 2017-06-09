@@ -14,25 +14,30 @@
 <div class="container">
 
     <div class="col-md-9 swipePanel">
-        <div class="prefBar">
-            <div class="genderPrefs">
-                <p>MEN'S:</p>
-                <input type="checkbox" onclick="setMale()" id="genderMale" checked>
-                <p>   WOMEN'S:</p>
-                <input type="checkbox" onclick="setFemale()" id="genderFemale" checked>
-                <p>   KID'S:</p>
-                <input type="checkbox" onclick="setKids()" id="genderKids" checked>
+        <!--<div class="row">-->
+            <div class="prefBar row">
+                <div class="genderPrefs col-md-3">
+                    <p>MEN'S:</p>
+                    <input type="checkbox" onclick="setMale()" id="genderMale" checked>
+                    <p>   WOMEN'S:</p>
+                    <input type="checkbox" onclick="setFemale()" id="genderFemale" checked>
+                    <p>   KID'S:</p>
+                    <input type="checkbox" onclick="setKids()" id="genderKids" checked>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="price" id="minPrice" placeholder="Min Price (cents)">
+                    <input type="text" class="price" id="maxPrice" placeholder="Max Price (cents)">
+
+                    <input type="text" class="price" id="brandInput" placeholder="Enter brand name">
+                    <input type="button" id="brandEnter" value="Search" onclick="brandAdd()">
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
+                    <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
+                </div>
+
             </div>
-            <input type="text" class="price" id="minPrice" placeholder="Min Price (cents)">
-            <input type="text" class="price" id="maxPrice" placeholder="Max Price (cents)">
-
-            <input type="text" class="price" id="brandInput" placeholder="Enter brand name">
-            <input type="button" id="brandEnter" value="Search" onclick="brandAdd()">
-
-            <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
-            <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
-
-        </div>
+        <!--</div>-->
         <div class="shwipeHead" id="shwipeHead">
             <img src="head.png" />
         </div>

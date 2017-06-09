@@ -220,7 +220,6 @@ function getNewPic(){
 
     currPic++;
     imageURL = curData.images.image[currPic % itemLoop].value;
-
     imageNode.setAttribute("src", imageURL);
 }
 

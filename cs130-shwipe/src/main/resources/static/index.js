@@ -89,6 +89,9 @@ document.onkeydown = function handleKeyPress(e){
     else if(e.keyCode == 39){
         like();
     }
+    else if(e.keyCode == 40){
+        getNewPic();
+    }
 }
 
 function newShoeHelper(){
@@ -112,7 +115,7 @@ function newShoeHelper(){
         morePics.setAttribute("onclick", "getNewPic()");
         morePics.setAttribute("id", "morepics");
 
-        document.getElementById("shoe-box").appendChild(morePics);
+        document.getElementById("morePicsButtonDiv").appendChild(morePics);
     }
 
     imageNode.setAttribute("src", imageURL);
@@ -161,11 +164,11 @@ function getLikes(){
 
 function addToLikeList(like_count){
     var newPara = document.createElement("p");
-    var newPara1 = document.createElement("p");
-    var t = document.createTextNode(curData.title);
-    //console.log(like_count);
-    var t1 = document.createTextNode(like_count + " likes");
-    newPara.appendChild(t);
+                               var newPara1 = document.createElement("p");
+                               var t = document.createTextNode(curData.title);
+                               //console.log(like_count);
+                               var t1 = document.createTextNode(like_count + " likes");
+                               newPara.appendChild(t);
     newPara1.appendChild(t1);
     var newImg = document.createElement("img");
     newImg.setAttribute("src", document.getElementById("currentShoe").firstElementChild.getAttribute("src"));
@@ -181,11 +184,13 @@ function addToLikeList(like_count){
     newDiv2.appendChild(newDiv1);
     newDiv2.appendChild(newDiv3);
 
-    var expand = document.createElement("p");
-    var t2 = document.createTextNode("see description");
-    expand.appendChild(t2);
+
+    var expand = document.createElement("div");
     expand.setAttribute("id", "expand");
-    newDiv2.appendChild(expand);
+    var see = document.createElement("p");
+    var t2 = document.createTextNode("see description");
+    see.appendChild(t2);
+    expand.appendChild(see);
 
     var link = document.createElement("a");
     link.setAttribute("href", curData.url.value);
@@ -195,7 +200,9 @@ function addToLikeList(like_count){
     var t3 = document.createTextNode(curData.description);
     desc.appendChild(t3);
     desc.setAttribute("id", "description");
-    newDiv2.appendChild(desc);
+    expand.appendChild(desc);
+    newDiv2.appendChild(expand);
+
 
     document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
 
@@ -252,7 +259,19 @@ function setPreferences() {
         query = query.concat("kids");
    }
 
-   query = query.concat("&brand=209412,255224&minPrice=10&maxPrice=10000&userId=" + getId());
+   var min = document.getElementById("minPrice").value;
+   var max = document.getElementById("maxPrice").value;
+
+   if(!min || !max) {
+        min = 0;
+        max = 10000;
+   }
+
+   query = query.concat("&minPrice=" + min + "&maxPrice=" + max);
+
+   query = query.concat("&brand=209412,255224");
+
+   query = query.concat("&userId=" + getId());
    console.log(query);
 
    fetch(query);

@@ -12,6 +12,37 @@
 </head>
 <body onload="getNewShoe()">
 <div class="container">
+
+    <div class="col-md-9 swipePanel">
+        <div class="prefBar">
+            <div class="genderPrefs">
+                <p>Male:</p>
+                <input type="checkbox" onclick="setMale()" id="genderMale" checked>
+                <p>   Female:</p>
+                <input type="checkbox" onclick="setFemale()" id="genderFemale" checked>
+                <p>   Kids:</p>
+                <input type="checkbox" onclick="setKids()" id="genderKids" checked>
+            </div>
+            <input type="text" class="price" id="minPrice" placeholder="Min Price">
+            <input type="text" class="price" id="maxPrice" placeholder="Max Price">
+
+            <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
+            <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
+
+        </div>
+        <div class="shwipeHead">
+            <img src="head.png" />
+        </div>
+        <div class="shoe-box" id="shoe-box">
+            <img src="dislike.png" class="btn" onclick="dislike()" />
+            <div id="currentShoe">
+                <img class="shoePicture" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
+            </div>
+            <img src="like.png" class="btn" onclick="like()" />
+        </div>
+        <div id="morePicsButtonDiv"></div>
+
+    </div>
     <div class="col-md-3" id="likePanel">
         <div id="likeHead">
             <h2> recently liked: </h2>
@@ -35,32 +66,6 @@
             </a>
             {{/likedProducts}}
         </div>
-    </div>
-    <div class="col-md-9 swipePanel">
-        <div class="prefBar">
-            <div class="genderPrefs">
-                <p>Male:</p>
-                <input type="checkbox" onclick="setMale()" id="genderMale" checked>
-                <p>   Female:</p>
-                <input type="checkbox" onclick="setFemale()" id="genderFemale" checked>
-                <p>   Kids:</p>
-                <input type="checkbox" onclick="setKids()" id="genderKids" checked>
-            </div>
-            <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
-            <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
-
-        </div>
-        <div class="shwipeHead">
-            <img src="head.png" />
-        </div>
-        <div class="shoe-box" id="shoe-box">
-            <img src="dislike.png" class="btn" onclick="dislike()" />
-            <div id="currentShoe">
-                <img class="shoePicture" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
-            </div>
-            <img src="like.png" class="btn" onclick="like()" />
-        </div>
-
     </div>
 </div>
 </body>

@@ -273,6 +273,7 @@ public class ShwipeController {
         BrandResponse response;
         String url = createBrandInfoRequestUrl(keyword);
         response = restTemplate.getForEntity(url, BrandResponse.class).getBody();
+        System.out.print(response.brands.brand.get(0).id);
         return response;
     }
 

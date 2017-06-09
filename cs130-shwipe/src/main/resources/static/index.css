@@ -102,11 +102,11 @@ html,body {
     display: none;
 }
 
-#description:click {
+#description:hover {
     display: block;
 }
 
-#expand:click > #description {
+#expand:hover > #description {
     display: block;
 }
 
@@ -216,4 +216,8 @@ html,body {
 #morePicsButtonDiv {
     height: 30px;
     margin: auto;
+}
+
+#brandEnter {
+    display: inline-block;
 }

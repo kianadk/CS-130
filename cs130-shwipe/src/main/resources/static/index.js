@@ -11,9 +11,21 @@ var likesEnabled = false;
 var male = true;
 var female = true;
 var kids = true;
+var brandArr = [];
 
 const LIKE_INDEX = 0;
 const DISLIKE_INDEX = 1;
+
+
+function addEnterFunctionality() {
+    document.getElementById("brandInput")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+        document.getElementById("brandEnter").click();
+    }
+    });
+}
 
 function loginCallback(response){
     if(response.status === "connected"){
@@ -235,6 +247,28 @@ function setKids() {
     kids = document.getElementById("genderKids").checked;
 }
 
+function brandAdd() {
+    var newBrand = document.getElementById("brandInput").value;
+
+    fetch("/brand?keyword=" + newBrand)
+        .then(response => {
+            response.json().then(data => {
+                if(data) {
+                    brandArr.push(data.brands.brand[0].id);
+                    document.getElementById("brandInput").setAttribute("placeholder","Added");
+                    document.getElementById("brandInput").value = "";
+
+                }
+                else {
+                    document.getElementById("brandInput").setAttribute("placeholder","Not Found");
+                    document.getElementById("brandInput").value = "";
+                }
+
+            });
+    });
+}
+
+
 function setPreferences() {
    var query = "/addPreferences?category=";
    var first = true;
@@ -263,8 +297,18 @@ function setPreferences() {
 
    query = query.concat("&minPrice=" + min + "&maxPrice=" + max);
 
-   query = query.concat("&brand=209412,255224");
-   //209412,255224
+
+   query = query.concat("&brand=")
+
+   first = true;
+   var brandId = "";
+
+   while (brandArr.length > 0) {
+        brandId = brandArr.pop();
+        if (!first) { query = query.concat(","); }
+        query = query.concat(brandId);
+        first = false;
+   }
 
    query = query.concat("&userId=" + getId());
    console.log(query);

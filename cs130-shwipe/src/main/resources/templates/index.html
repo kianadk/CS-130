@@ -10,7 +10,7 @@
     <script src="/index.js"></script>
     <title>Shwipe</title>
 </head>
-<body onload="getNewShoe()">
+<body onload="getNewShoe(); addEnterFunctionality();">
 <div class="container">
 
     <div class="col-md-9 swipePanel">
@@ -26,11 +26,14 @@
             <input type="text" class="price" id="minPrice" placeholder="Min Price (cents)">
             <input type="text" class="price" id="maxPrice" placeholder="Max Price (cents)">
 
+            <input type="text" class="price" id="brandInput" placeholder="Enter brand name">
+            <input type="button" id="brandEnter" value="Search" onclick="brandAdd()">
+
             <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
             <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
 
         </div>
-        <div class="shwipeHead">
+        <div class="shwipeHead" id="shwipeHead">
             <img src="head.png" />
         </div>
         <div class="shoe-box" id="shoe-box">

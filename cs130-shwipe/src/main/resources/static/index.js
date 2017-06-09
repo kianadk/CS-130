@@ -115,9 +115,9 @@ function newShoeHelper(){
     if (curData.images.image[1]) {
         var morePics = document.createElement("button");
         morePics.setAttribute("type", "button");
-        morePics.setAttribute("class", "btn");
         morePics.setAttribute("onclick", "getNewPic()");
         morePics.setAttribute("id", "morepics");
+        morePics.innerHTML = "MORE PICS"
 
         document.getElementById("morePicsButtonDiv").appendChild(morePics);
     }
@@ -167,48 +167,50 @@ function getLikes(){
 }
 
 function addToLikeList(like_count){
-    var newPara = document.createElement("p");
-                               var newPara1 = document.createElement("p");
-                               var t = document.createTextNode(curData.title);
-                               //console.log(like_count);
-                               var t1 = document.createTextNode(like_count + " likes");
-                               newPara.appendChild(t);
-    newPara1.appendChild(t1);
+    var title = document.createElement("p");
+    var likes = document.createElement("p");
+    var titleText = document.createTextNode(curData.title);
+    var likeText = document.createTextNode(like_count + " likes");
+    title.appendChild(titleText);
+    likes.appendChild(likeText);
+
+    var link = document.createElement("a");
+    link.setAttribute("href", curData.url.value);
+    link.appendChild(title);
+
     var newImg = document.createElement("img");
     newImg.setAttribute("src", document.getElementById("currentShoe").firstElementChild.getAttribute("src"));
-    var newDiv1 = document.createElement("div");
-    newDiv1.setAttribute("class", "textBox");
-    newDiv1.appendChild(newPara);
-    var newDiv3 = document.createElement("div");
-    newDiv3.setAttribute("class", "data");
-    newDiv3.appendChild(newPara1);
-    var newDiv2 = document.createElement("div");
-    newDiv2.setAttribute("class", "likedProd");
-    newDiv2.appendChild(newImg);
-    newDiv2.appendChild(newDiv1);
-    newDiv2.appendChild(newDiv3);
+    newImg.setAttribute("class", "likedProdImg");
+
+    var textBox = document.createElement("div");
+    textBox.setAttribute("class", "textBox");
+    textBox.appendChild(link);
+
+    var likesData = document.createElement("div");
+    likesData.setAttribute("class", "data");
+    likesData.appendChild(likes);
+    var likedProd = document.createElement("div");
+    likedProd.setAttribute("class", "likedProd");
+    likedProd.appendChild(newImg);
+    likedProd.appendChild(textBox);
+    likedProd.appendChild(likesData);
 
 
     var expand = document.createElement("div");
     expand.setAttribute("id", "expand");
     var see = document.createElement("p");
-    var t2 = document.createTextNode("see description");
+    var t2 = document.createTextNode(">> see description");
     see.appendChild(t2);
     expand.appendChild(see);
-
-    var link = document.createElement("a");
-    link.setAttribute("href", curData.url.value);
-    link.appendChild(newDiv2);
 
     var desc = document.createElement("p");
     var t3 = document.createTextNode(curData.description);
     desc.appendChild(t3);
     desc.setAttribute("id", "description");
     expand.appendChild(desc);
-    newDiv2.appendChild(expand);
+    likedProd.appendChild(expand);
 
-
-    document.getElementById("likeList").insertBefore(link, document.getElementById("likeList").firstElementChild);
+    document.getElementById("likeList").insertBefore(likedProd, document.getElementById("likeList").firstElementChild);
 
 }
 
@@ -216,22 +218,8 @@ function getNewPic(){
     var imageURL;
     var imageNode = document.getElementById("currentShoe").firstElementChild;
 
-    imageURL = curData.images.image[currPic % itemLoop].value;
     currPic++;
-
-//    if (curData.images.image[0].value == imageNode.getAttribute("src")) {
-//        imageURL = curData.images.image[1].value;
-//    }
-//    else if (curData.images.image[1].value == imageNode.getAttribute("src") && curData.images.image[2]) {
-//        imageURL = curData.images.image[2].value;
-//    }
-//    else if (curData.images.image[2].value == imageNode.getAttribute("src") && curData.images.image[3]) {
-//         imageURL = curData.images.image[3].value;
-//    }
-//    else if (curData.images.image[3].value == imageNode.getAttribute("src") && curData.images.image[4]) {
-//        imageURL = curData.images.image[4].value;
-//    }
-//    else { imageURL = curData.images.image[0].value; }
+    imageURL = curData.images.image[currPic % itemLoop].value;
 
     imageNode.setAttribute("src", imageURL);
 }
@@ -271,12 +259,13 @@ function setPreferences() {
 
    if(!min || !max) {
         min = 0;
-        max = 10000;
+        max = 100000;
    }
 
    query = query.concat("&minPrice=" + min + "&maxPrice=" + max);
 
    query = query.concat("&brand=209412,255224");
+   //209412,255224
 
    query = query.concat("&userId=" + getId());
    console.log(query);

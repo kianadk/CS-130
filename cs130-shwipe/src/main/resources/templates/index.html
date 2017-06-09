@@ -57,21 +57,25 @@
         </div>
         <div id="likeList">
             {{#likedProducts}}
-            <a href="{{linkToBuy}}">
+            <!--<a href="{{linkToBuy}}">-->
                 <div class="likedProd">
-                    <img src="{{productPicture}}"/>
+                    <img class="likedProdImg" src="{{productPicture}}"/>
                     <div class="textBox">
-                        <p>{{productName}}</p>
+                        <a href="{{linkToBuy}}">
+                            <p>{{productName}}</p>
+                        </a>
                     </div>
                     <div class="data">
                         <p>{{numLikes}} likes</p>
                     </div>
-                    <p id="expand">see description</p>
-                    <p id="description">
-                        {{productDescription}}
-                    </p>
+                    <div id="expand">
+                        <p>>> see description </p>
+                        <p id="description">
+                            {{productDescription}}
+                        </p>
+                    </div>
                 </div>
-            </a>
+            <!--</a>-->
             {{/likedProducts}}
         </div>
     </div>

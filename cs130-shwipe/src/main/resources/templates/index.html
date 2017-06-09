@@ -46,19 +46,18 @@
                 <p>   Kids:</p>
                 <input type="checkbox" onclick="setKids()" id="genderKids" checked>
             </div>
-            <button type="button" class="btn" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
+            <button type="button" class="buttons" id="submitBtn" onclick="setPreferences()">SUBMIT</button>
+            <button type="button" class="buttons" id="logoutBtn" onclick="logout()">Logout</button>
         </div>
-        <h1>shwipe</h1>
-        <button type="button" class="btn" id="logoutBtn" onclick="logout()">Logout</button>
+        <div class="title">
+            <h1>shwipe</h1>
+        </div>
         <div class="shoe-box" id="shoe-box">
-            <!--<button type="button" class="btn" id="dislikeBtn" onclick="dislike()">-->
-                <img src="dislike.png" class="btn" onclick="dislike()" />
-            <!--</button>-->
+            <img src="dislike.png" class="btn" onclick="dislike()" />
             <div id="currentShoe">
                 <img class="shoePicture" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
             </div>
-            <!--<button type="button" class="btn" id="likeBtn" onclick="like()">-->
-            <img src="like.png" class="btn" onclick="like()" />            <!--</button>-->
+            <img src="like.png" class="btn" onclick="like()" />
         </div>
 
     </div>

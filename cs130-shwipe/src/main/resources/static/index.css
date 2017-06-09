@@ -62,20 +62,27 @@ html,body {
     font-weight: 100;
 }
 
+.title {
+    max-height: 20%;
+    max-width: 100%;
+}
+
 .shoe-box {
     margin: auto;
     top: 0; bottom: 0; left: 0; right: 0;
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 700px;
-    height: 500px;
+    height: 70%;
+    max-width: 75%;
+    /*height: 500px;*/
     vertical-align: center;
+    margin-bottom: 10px;
 }
 
 .shoePicture{
-    height: 500px;
-    width: 500px;
+    /*height: 500px;*/
+    height: 100%;
     display: inline;
     margin: auto;
 }
@@ -86,6 +93,7 @@ html,body {
 
 #currentShoe {
     display: inline;
+    height: 100%;
 }
 
 .btn {
@@ -106,7 +114,7 @@ html,body {
     position: static;
     float: left;
     width: 100%;
-    height: 50px;
+    height: 5%;
     background-color: black;
 }
 
@@ -127,7 +135,30 @@ html,body {
     display: inline-block;
 }
 
-#submitBtn {
+.buttons {
+    /*float: right;*/
+    background-color: black; /* Blue */
+    border: none;
+    color: white;
+    /*padding: 16px 32px;*/
+    text-align: center;
+    text-decoration: none;
     display: inline-block;
+    height: 100%;
+    /*margin: 4px 2px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+
+.buttons {
     float: right;
+    background-color: black;
+    color: white;
+}
+
+.buttons:hover {
+    background-color: white;
+    color: black;
 }
